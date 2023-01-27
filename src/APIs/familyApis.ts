@@ -33,10 +33,47 @@ export async function GetFamily(values: any) {
 
 export async function AddFamilyMember(data: any, memId: string) {
   try {
-    axios.post(apiEndpoint + "familyTree/add", {
-      id: GetCookie("activeFamilyID"),
+    const response = await axios.post(apiEndpoint + "familyTree/add", {
+      familyId: GetCookie("activeFamilyID"),
       data,
       memId,
     });
-  } catch (error) {}
+    console.log(
+      "🚀 ~ file: familyApis.ts:41 ~ AddFamilyMember ~ response",
+      response
+    );
+    if (response?.data) {
+      toast.success(response?.data?.message, {
+        containerId: "top-right",
+      });
+    }
+  } catch (error: any) {
+    console.log("🚀 ~ file: familyApis.ts:51 ~ AddFamilyMember ~ error", error);
+    toast.error(error?.response?.data?.message, {
+      containerId: "top-right",
+    });
+  }
+  console.log("<><><><>><><>");
+}
+
+export async function DeleteFamilyMember(memId: string) {
+  try {
+    const response = await axios.post(apiEndpoint + "familyTree/delete", {
+      familyId: GetCookie("activeFamilyID"),
+      memId,
+    });
+    if (response?.data) {
+      toast.success(response?.data?.message, {
+        containerId: "top-right",
+      });
+    }
+  } catch (error: any) {
+    console.log(
+      "🚀 ~ file: familyApis.ts:69 ~ DeleteFamilyMember ~ error",
+      error
+    );
+    toast.error(error?.response?.data?.message, {
+      containerId: "top-right",
+    });
+  }
 }

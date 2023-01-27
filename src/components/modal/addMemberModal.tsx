@@ -2,7 +2,8 @@ import { Button, Form, Input, Modal, Select } from "antd";
 import { AddFamilyMember } from "../../APIs/familyApis";
 const { Option } = Select;
 
-const AddMemberModal = ({ isModalOpen, setIsModalOpen, memId }: any) => {
+const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
+  const memId = member.id;
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -19,8 +20,9 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, memId }: any) => {
   };
   const [form] = Form.useForm();
 
-  const onFinish = (values: any) => {
-    AddFamilyMember(values, memId);
+  const onFinish = async (values: any) => {
+    const response = await AddFamilyMember(values, memId);
+    console.log("🚀 ~ file: modal.tsx:25 ~ onFinish ~ response", response);
     console.log(values);
   };
 
@@ -60,10 +62,19 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, memId }: any) => {
               placeholder="Select a option and change input text above"
               allowClear
             >
-              <Option value="Parent">Parent</Option>
-              <Option value="Sibling">Sibling</Option>
-              <Option value="Child">Child</Option>
-              <Option value="Spouse">Spouse</Option>
+              {member?.parents?.length === 0 && (
+                <Option value="Parent">Parent</Option>
+              )}
+              {member?.parents?.length > 0 && (
+                <Option value="Sibling">Sibling</Option>
+              )}
+              {member?.spouse?.length > 0 && member.gender === "male" && (
+                <Option value="Child">Child</Option>
+              )}
+
+              {member?.spouse?.length === 0 && (
+                <Option value="Spouse">Spouse</Option>
+              )}
             </Select>
           </Form.Item>
           <Form.Item name="gender" label="Gender" rules={[{ required: true }]}>
@@ -73,7 +84,7 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, memId }: any) => {
             >
               <Option value="male">male</Option>
               <Option value="female">female</Option>
-              <Option value="other">other</Option>
+              {/* <Option value="other">other</Option> */}
             </Select>
           </Form.Item>
           <Form.Item

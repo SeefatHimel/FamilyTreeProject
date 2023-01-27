@@ -17,11 +17,17 @@ const ViewTree = () => {
     for (let i = 0; i < familyDetails.members.length; i++) {
       if (familyDetails.members[i].id === id) return familyDetails.members[i];
     }
+    return false;
   }
 
   const BuildTree = (member: any) => {
     console.log("member", member);
 
+    const spouse = member?.spouse[0] ? getMember(member?.spouse[0]) : null;
+
+    const children =
+      member?.children?.length > 0 ? member?.children : spouse?.children;
+    console.log("🚀 ~ file: viewTree.tsx:28 ~ BuildTree ~ children", children);
     return (
       <>
         {member && (
@@ -35,7 +41,14 @@ const ViewTree = () => {
                     origin={setOrigin}
                   />
                 </div>
-                {member?.spouse[0] &&
+                {spouse && (
+                  <GenComponent
+                    member={spouse}
+                    setOrigin={setOrigin}
+                    origin={origin}
+                  />
+                )}
+                {/* {member?.spouse[0] &&
                   member?.spouse.map(
                     (spId: string) =>
                       getMember(spId) && (
@@ -45,13 +58,16 @@ const ViewTree = () => {
                           origin={origin}
                         />
                       )
-                  )}
+                  )} */}
               </div>
               <div className="flex">
-                {member?.children[0] &&
-                  member?.children.map((cldId: string) => (
-                    <div>{BuildTree(getMember(cldId))}</div>
-                  ))}
+                {children &&
+                  children.map(
+                    (cldId: string) =>
+                      getMember(cldId) && (
+                        <div>{BuildTree(getMember(cldId))}</div>
+                      )
+                  )}
               </div>
             </Card>
           </div>

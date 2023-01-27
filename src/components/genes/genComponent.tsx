@@ -1,7 +1,8 @@
 import { UserOutlined } from "@ant-design/icons";
 import { Card, Avatar, Button } from "antd";
 import { useState } from "react";
-import AddMemberModal from "../modal/modal";
+import { DeleteFamilyMember } from "../../APIs/familyApis";
+import AddMemberModal from "../modal/addMemberModal";
 
 const GenComponent = ({ member, origin, setOrigin }: any) => {
   const [hovering, setHovering] = useState(false);
@@ -12,7 +13,7 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
     <div className="bg-gray-500 p-4 relative">
       <Card
         size="small"
-        className="max-w-xs w-52 relative"
+        className="max-w-xs w-40 relative"
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={() => {
           setHovering(false);
@@ -44,6 +45,7 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
         >
           <Button
             type="primary"
+            // disabled={member.gender !== "male"}
             className="p-0.5 bg-green-600"
             onClick={() => setIsModalOpen(true)}
           >
@@ -71,7 +73,7 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
           <Button
             type="primary"
             className="p-0.5 bg-red-600"
-            // onClick={() => setOrigin(member.id)}
+            onClick={() => DeleteFamilyMember(member.id)}
           >
             Delete
           </Button>
@@ -80,7 +82,7 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
       <AddMemberModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-        memId={memId}
+        member={member}
       />
       {/* <Button onClick={() => setIsModalOpen(true)}>add mem</Button> */}
     </div>
