@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
+import membersReducer from "../hooks/reducers/membersReducer";
 import userReducer from "../hooks/reducers/userReducer";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    members : membersReducer
   },
 });
 

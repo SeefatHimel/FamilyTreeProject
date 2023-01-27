@@ -12,7 +12,7 @@ function Header() {
 
   return (
     <div className="flex justify-between items-center px-4">
-      <div className="text-2xl text-blue-500 py-6">Header </div>
+      <div className="text-2xl text-blue-500 py-6">Family Tree Project </div>
       {path === "/login" || path === "/registration" ? (
         <Button
           type="primary"

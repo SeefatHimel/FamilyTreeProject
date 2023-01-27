@@ -15,6 +15,8 @@ import Header from "./components/header";
 import { Provider } from "react-redux";
 import { store } from "./storage/store";
 import InitialLoading from "./components/InitialLoading";
+import ViewTree from "./components/familyList/components/viewTree";
+import FamilyList from "./components/familyList";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -38,6 +40,8 @@ root.render(
           <Route index path="/registration" element={<Registration />} />
           <Route index path="/logout" element={<Logout />} />
           <Route index path="/home" element={<Home />} />
+          <Route index path="/FamilyTree/List" element={<FamilyList />} />
+          <Route index path="/FamilyTree/Family/:id" element={<ViewTree />} />
           <Route index path="/" element={<Home />} />
         </Routes>
       </Router>
