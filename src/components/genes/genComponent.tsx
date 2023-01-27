@@ -3,11 +3,13 @@ import { Card, Avatar, Button } from "antd";
 import { useState } from "react";
 import { DeleteFamilyMember } from "../../APIs/familyApis";
 import AddMemberModal from "../modal/addMemberModal";
+import EditMemberModal from "../modal/editMemberModal";
 
 const GenComponent = ({ member, origin, setOrigin }: any) => {
   const [hovering, setHovering] = useState(false);
   const [options, setOptions] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const memId = member.id;
   return (
     <div className="bg-gray-500 p-4 relative">
@@ -47,7 +49,7 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
             type="primary"
             // disabled={member.gender !== "male"}
             className="p-0.5 bg-green-600"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => setIsAddModalOpen(true)}
           >
             Add
           </Button>
@@ -77,14 +79,26 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
           >
             Delete
           </Button>
+          <Button
+            type="primary"
+            className="p-0.5 bg-green-600"
+            onClick={() => setIsEditModalOpen(true)}
+          >
+            Update
+          </Button>
         </div>
       </Card>
-      <AddMemberModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
+      <EditMemberModal
+        isModalOpen={isEditModalOpen}
+        setIsModalOpen={setIsEditModalOpen}
         member={member}
       />
-      {/* <Button onClick={() => setIsModalOpen(true)}>add mem</Button> */}
+      <AddMemberModal
+        isModalOpen={isAddModalOpen}
+        setIsAddModalOpen={setIsAddModalOpen}
+        member={member}
+      />
+      {/* <Button onClick={() => setIsAddModalOpen(true)}>add mem</Button> */}
     </div>
   );
 };

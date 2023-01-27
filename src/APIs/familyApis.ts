@@ -77,3 +77,27 @@ export async function DeleteFamilyMember(memId: string) {
     });
   }
 }
+
+export async function UpdateFamilyMember(data: any) {
+  try {
+    const response = await axios.put(apiEndpoint + "familyTree/update", {
+      familyId: GetCookie("activeFamilyID"),
+      data,
+    });
+    if (response?.data) {
+      toast.success(response?.data?.message, {
+        containerId: "top-right",
+      });
+    }
+    return true;
+  } catch (error: any) {
+    console.log(
+      "🚀 ~ file: familyApis.ts:51 ~ UpdateFamilyMember ~ error",
+      error
+    );
+    toast.error(error?.response?.data?.message, {
+      containerId: "top-right",
+    });
+    return false;
+  }
+}

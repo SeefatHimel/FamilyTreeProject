@@ -1,9 +1,11 @@
 import { Button, Form, Input, Modal, Select } from "antd";
-import { AddFamilyMember } from "../../APIs/familyApis";
+import { UpdateFamilyMember } from "../../APIs/familyApis";
+import { useState } from "react";
 const { Option } = Select;
 
-const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
+const EditMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
   const memId = member.id;
+  const [gender, setGerder] = useState(member.gender);
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -21,9 +23,18 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
   const [form] = Form.useForm();
 
   const onFinish = async (values: any) => {
-    const response = await AddFamilyMember(values, memId);
-    console.log("🚀 ~ file: modal.tsx:25 ~ onFinish ~ response", response);
-    console.log(values);
+    const tmp = { ...member };
+    tmp.name = values.name;
+    tmp.imgLink = values.imgLink;
+    // tmp.gender = values.gender;
+    console.log(
+      "🚀 ~ file: editMemberModal.tsx:27 ~ onFinish ~ member",
+      member
+    );
+    console.log("🚀 ~ file: editMemberModal.tsx:27 ~ onFinish ~ tmp", tmp);
+    const updated = await UpdateFamilyMember(tmp);
+    console.log(updated);
+    if (updated) setIsModalOpen(false);
   };
 
   const onReset = () => {
@@ -45,46 +56,38 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
           onFinish={onFinish}
           style={{ maxWidth: 600 }}
         >
-          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="imgLink" label="Image" rules={[{ required: true }]}>
+          <Form.Item
+            initialValue={member.name}
+            name="name"
+            label="Name"
+            rules={[{ required: true }]}
+          >
             <Input />
           </Form.Item>
 
           <Form.Item
-            name="relation"
-            label="Relation"
+            initialValue={member.imgLink}
+            name="imgLink"
+            label="Image"
+            rules={[{ required: true }]}
+          >
+            <Input />
+          </Form.Item>
+
+          {/* <Form.Item
+            initialValue={member.gender}
+            name="gender"
+            label="Gender"
             rules={[{ required: true }]}
           >
             <Select
               placeholder="Select a option and change input text above"
               allowClear
-            >
-              {member?.parents?.length === 0 && (
-                <Option value="Parent">Parent</Option>
-              )}
-              {member?.parents?.length > 0 && (
-                <Option value="Sibling">Sibling</Option>
-              )}
-              {member?.spouse?.length > 0 && member.gender === "male" && (
-                <Option value="Child">Child</Option>
-              )}
-
-              {member?.spouse?.length === 0 && (
-                <Option value="Spouse">Spouse</Option>
-              )}
-            </Select>
-          </Form.Item>
-          <Form.Item name="gender" label="Gender" rules={[{ required: true }]}>
-            <Select
-              placeholder="Select a option and change input text above"
-              allowClear
+              value={gender}
+              onChange={(e) => console.log(e)}
             >
               <Option value="male">male</Option>
               <Option value="female">female</Option>
-              {/* <Option value="other">other</Option> */}
             </Select>
           </Form.Item>
           <Form.Item
@@ -104,7 +107,7 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
                 </Form.Item>
               ) : null
             }
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">
               Submit
@@ -119,4 +122,4 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
   );
 };
 
-export default AddMemberModal;
+export default EditMemberModal;
