@@ -31,10 +31,10 @@ const ViewTree = () => {
     return (
       <>
         {member && (
-          <div className="flex">
-            <Card>
-              <div className="flex mx-auto w-min">
-                <div className="bg-red-500 p-1">
+          <div className="flex m-1">
+            <div className="m-2 p-0.5 rounded-lg h-min">
+              <div className="flex mx-auto w-min pb-2">
+                <div className="bg-rred-500 rounded-lg">
                   <GenComponent
                     member={member}
                     setOrigin={setOrigin}
@@ -60,16 +60,21 @@ const ViewTree = () => {
                       )
                   )} */}
               </div>
+              {children && children.length > 0 && (
+                <div className="h-1 w-5/6 mx-auto bg-red-600" />
+              )}
               <div className="flex">
-                {children &&
-                  children.map(
-                    (cldId: string) =>
-                      getMember(cldId) && (
-                        <div>{BuildTree(getMember(cldId))}</div>
-                      )
-                  )}
+                {children && children.length > 0 && (
+                  <div className="flex p-0.5 rounded-lg">
+                    {children &&
+                      children.map(
+                        (cldId: string) =>
+                          getMember(cldId) && BuildTree(getMember(cldId))
+                      )}
+                  </div>
+                )}
               </div>
-            </Card>
+            </div>
           </div>
         )}
       </>
@@ -77,15 +82,15 @@ const ViewTree = () => {
   };
 
   return (
-    <>
+    <div className="mx-auto w-full">
       <div>Family Name : {familyDetails.name}</div>
       <div>Total members : {familyDetails.members.length} </div>
       {/* {familyDetails &&
         familyDetails.members.map((member: any) => (
           <GenComponent member={member} />
         ))} */}
-      {<div>{BuildTree(getMember(origin))}</div>}
-    </>
+      {<div className="mx-auto w-min">{BuildTree(getMember(origin))}</div>}
+    </div>
   );
 };
 

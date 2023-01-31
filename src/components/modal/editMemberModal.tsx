@@ -1,11 +1,11 @@
-import { Button, Form, Input, Modal, Select } from "antd";
+import { Button, Form, Input, Modal } from "antd";
 import { UpdateFamilyMember } from "../../APIs/familyApis";
-import { useState } from "react";
-const { Option } = Select;
+// import { useState } from "react";
+// const { Option } = Select;
 
 const EditMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
-  const memId = member.id;
-  const [gender, setGerder] = useState(member.gender);
+  // const memId = member.id;
+  // const [gender, setGerder] = useState(member.gender);
   const handleOk = () => {
     setIsModalOpen(false);
   };

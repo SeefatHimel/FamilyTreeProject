@@ -12,10 +12,10 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const memId = member.id;
   return (
-    <div className="bg-gray-500 p-4 relative">
-      <Card
-        size="small"
-        className="max-w-xs w-40 relative"
+    <div className="relative">
+      <div
+        // size="small"
+        className="max-w-xs w-30 relative p-2 pt-0 m-2"
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={() => {
           setHovering(false);
@@ -24,7 +24,7 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
       >
         <Button
           type="primary"
-          className={`absolute right-2 top-2 bg-slate-400 p-0 m-0 rounded-lg ${
+          className={`absolute right-2 top-2 bg-slate-400 p-0 m-0 rounded-lg z-20 ${
             hovering ? "" : "invisible"
           }`}
           shape="circle"
@@ -35,13 +35,27 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
         >
           ---
         </Button>
-        <div className="flex flex-col items-center">
-          <Avatar size={64} src={member.imgLink} alt="Error" />{" "}
+        <div className="flex flex-col items-center relative">
+          <div className="absolute">
+            <Avatar
+              size={64}
+              src={member.imgLink}
+              alt="Error"
+              className="z-10"
+            />
+          </div>
           {/* <Avatar size={64} icon={<UserOutlined />} />{" "} */}
-          <div>{member?.name ? member?.name : "No name"}</div>
+          <Card
+            size="small"
+            className={`mt-12 z-0 w-20 text-center ${
+              member.gender === "male" ? "bg-blue-500" : "bg-rose-400"
+            }`}
+          >
+            <div>{member?.name ? member?.name : "No name"}</div>
+          </Card>
         </div>
         <div
-          className={` absolute right-9 top-0 grid grid-cols-2 gap-2 z-100 ${
+          className={`w-32 p-2 bg-slate-400 absolute right-9 top-0 flex flex-wrap justify-center rounded-xl gap-2 z-20 ${
             options ? "" : "hidden"
           }`}
         >
@@ -87,7 +101,7 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
             Update
           </Button>
         </div>
-      </Card>
+      </div>
       <EditMemberModal
         isModalOpen={isEditModalOpen}
         setIsModalOpen={setIsEditModalOpen}
