@@ -95,7 +95,7 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
       />
       <AddMemberModal
         isModalOpen={isAddModalOpen}
-        setIsAddModalOpen={setIsAddModalOpen}
+        setIsModalOpen={setIsAddModalOpen}
         member={member}
       />
       {/* <Button onClick={() => setIsAddModalOpen(true)}>add mem</Button> */}

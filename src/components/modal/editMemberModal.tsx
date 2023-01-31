@@ -48,6 +48,7 @@ const EditMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        footer={null}
       >
         <Form
           {...layout}
@@ -112,8 +113,12 @@ const EditMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
-            <Button htmlType="button" onClick={onReset}>
+            <Button htmlType="button" danger onClick={onReset}>
               Reset
+            </Button>
+
+            <Button htmlType="button" onClick={handleCancel}>
+              Cancel
             </Button>
           </Form.Item>
         </Form>

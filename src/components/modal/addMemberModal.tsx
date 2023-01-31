@@ -2,12 +2,17 @@ import { Button, Form, Input, Modal, Select } from "antd";
 import { AddFamilyMember } from "../../APIs/familyApis";
 const { Option } = Select;
 
-const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
+type Props = {
+  isModalOpen: boolean;
+  setIsModalOpen: Function;
+  member: any;
+};
+
+const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
   const memId = member.id;
   const handleOk = () => {
     setIsModalOpen(false);
   };
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -24,6 +29,7 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
     const response = await AddFamilyMember(values, memId);
     console.log("🚀 ~ file: modal.tsx:25 ~ onFinish ~ response", response);
     console.log(values);
+    setIsModalOpen(false);
   };
 
   const onReset = () => {
@@ -37,6 +43,7 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        footer={null}
       >
         <Form
           {...layout}
@@ -106,11 +113,14 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
             }
           </Form.Item>
           <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" className="bg-green-500">
               Submit
             </Button>
             <Button htmlType="button" onClick={onReset}>
               Reset
+            </Button>
+            <Button htmlType="button" onClick={handleCancel}>
+              Cancel
             </Button>
           </Form.Item>
         </Form>
