@@ -1,21 +1,22 @@
 import GenComponent from "../../genes/genComponent";
 import { useSelector } from "react-redux";
-import { Card } from "antd";
+import { Card, Button } from "antd";
 import { useState } from "react";
+import { OrgChartTree } from "./testTree";
 
 const ViewTree = () => {
   const familyDetails = useSelector(
     (state: any) => state?.members?.MembersList
   );
-  const [origin, setOrigin] = useState(familyDetails.members[0].id);
+  const [origin, setOrigin] = useState(familyDetails?.members[0].id);
   console.log(
     "🚀 ~ file: viewTree.tsx:6 ~ ViewTree ~ familyDetails",
     familyDetails
   );
 
   function getMember(id: string) {
-    for (let i = 0; i < familyDetails.members.length; i++) {
-      if (familyDetails.members[i].id === id) return familyDetails.members[i];
+    for (let i = 0; i < familyDetails?.members.length; i++) {
+      if (familyDetails?.members[i].id === id) return familyDetails?.members[i];
     }
     return false;
   }
@@ -81,15 +82,36 @@ const ViewTree = () => {
     );
   };
 
+  const [orientation, setOrientation] = useState<"vertical" | "horizontal">(
+    "vertical"
+  );
   return (
     <div className="mx-auto w-full">
-      <div>Family Name : {familyDetails.name}</div>
-      <div>Total members : {familyDetails.members.length} </div>
+      <div>Family Name : {familyDetails?.name}</div>
+      <div>Total members : {familyDetails?.members.length} </div>
       {/* {familyDetails &&
-        familyDetails.members.map((member: any) => (
+        familyDetails?.members.map((member: any) => (
           <GenComponent member={member} />
         ))} */}
-      {<div className="mx-auto w-min">{BuildTree(getMember(origin))}</div>}
+      <Button
+        onClick={() => {
+          orientation === "vertical"
+            ? setOrientation("horizontal")
+            : setOrientation("vertical");
+        }}
+      >
+        Change
+      </Button>
+      <div className="w-full mx-auto bg-blue-200">
+        <OrgChartTree
+          origin={origin}
+          setOrigin={setOrigin}
+          orientation={orientation}
+          setOrientation={setOrientation}
+          members={familyDetails?.members}
+        />
+      </div>
+      {/* {<div className="mx-auto w-min">{BuildTree(getMember(origin))}</div>} */}
     </div>
   );
 };

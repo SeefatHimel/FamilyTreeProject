@@ -15,11 +15,11 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
     <div className="relative">
       <div
         // size="small"
-        className="max-w-xs w-30 relative p-2 pt-0 m-2"
+        className="max-w-xs w-20 relative p-2 pt-0 m-2"
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={() => {
           setHovering(false);
-          setOptions(false);
+          // setOptions(false);
         }}
       >
         <Button
