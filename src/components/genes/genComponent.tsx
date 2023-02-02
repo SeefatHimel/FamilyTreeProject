@@ -1,4 +1,4 @@
-import { UserOutlined } from "@ant-design/icons";
+// import { UserOutlined } from "@ant-design/icons";
 import { Card, Avatar, Button } from "antd";
 import { useState } from "react";
 import { DeleteFamilyMember } from "../../APIs/familyApis";
@@ -10,7 +10,7 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
   const [options, setOptions] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const memId = member.id;
+  // const memId = member.id;
   return (
     <div className="relative">
       <div
@@ -24,7 +24,7 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
       >
         <Button
           type="primary"
-          className={`absolute right-2 top-2 bg-slate-400 p-0 m-0 rounded-lg z-20 ${
+          className={`absolute right-2 top-2 bg-slate-400 p-0 m-0 rounded-lg z-30 ${
             hovering ? "" : "invisible"
           }`}
           shape="circle"
@@ -41,13 +41,13 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
               size={64}
               src={member.imgLink}
               alt="Error"
-              className="z-10"
+              className="z-20"
             />
           </div>
           {/* <Avatar size={64} icon={<UserOutlined />} />{" "} */}
           <Card
             size="small"
-            className={`mt-12 z-0 w-20 text-center ${
+            className={`mt-12 z-10 w-20 text-center ${
               member.gender === "male" ? "bg-blue-500" : "bg-rose-400"
             }`}
           >
@@ -55,7 +55,7 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
           </Card>
         </div>
         <div
-          className={`w-32 p-2 bg-slate-400 absolute right-9 top-0 flex flex-wrap justify-center rounded-xl gap-2 z-20 ${
+          className={`w-32 p-2 bg-slate-400 absolute right-9 top-0 flex flex-wrap justify-center rounded-xl gap-2 z-30 ${
             options ? "" : "hidden"
           }`}
         >
@@ -67,7 +67,6 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
           >
             Add
           </Button>
-
           <Button
             type="primary"
             className="p-0.5 bg-green-600"
@@ -76,7 +75,6 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
           >
             Go Up
           </Button>
-
           <Button
             type="primary"
             className="p-0.5 bg-green-600"
@@ -112,7 +110,6 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
         setIsModalOpen={setIsAddModalOpen}
         member={member}
       />
-      {/* <Button onClick={() => setIsAddModalOpen(true)}>add mem</Button> */}
     </div>
   );
 };
