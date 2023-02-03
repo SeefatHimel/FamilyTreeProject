@@ -24,10 +24,11 @@ const ViewTree = () => {
   );
 
   const lineColor = "bg-green-600";
+  const lineColor2 = "bg-green-600";
   const lineWidth = "px-[1px]";
   const lineHeight = "py-[1px]";
-  const horizontalLine = `${lineHeight} w-full left-[50%] top-[-20px] ${lineColor} absolute`;
-  // const verticalLine = `${lineHeight} w-full left-[-50%] top-[-20px] ${lineColor} absolute`;
+  const horizontalLine = `${lineHeight} w-[150%] left-[10%] top-[-18px] ${lineColor} absolute`;
+  // const verticalLine = `${lineHeight} w-full left-[-50%] top-[-18px] ${lineColor} absolute`;
   function getMember(id: string) {
     for (let i = 0; i < familyDetails.members.length; i++) {
       if (familyDetails.members[i].id === id) return familyDetails.members[i];
@@ -39,16 +40,35 @@ const ViewTree = () => {
     console.log("member", member);
 
     const spouse = member?.spouse[0] ? getMember(member?.spouse[0]) : null;
-
     const children =
       member?.children?.length > 0 ? member?.children : spouse?.children;
     console.log("🚀 ~ file: viewTree.tsx:28 ~ BuildTree ~ children", children);
+
     return (
       <>
         {member && (
           <div className="flex m-1  overflow-visible">
             <div className="m-2 p-0.5 rounded-lg h-min relative">
-              <div className="flex mx-auto w-min pb-2 ">
+              {spouse &&
+                member.id !== origin &&
+                len > 1 &&
+                (index < len - 1 ? (
+                  <div
+                    className={`${lineHeight} w-[80%] left-[40%] top-[-16px] ${lineColor2} absolute`}
+                  />
+                ) : (
+                  <div
+                    className={`${lineHeight} w-[100%] right-[60%] top-[-16px] ${lineColor} absolute`}
+                  />
+                ))}
+              <div className="flex h-min mx-auto w-min pb-2 relative">
+                {children && children.length > 0 && (
+                  <div className=" overflow-hidden absolute inset-0 ">
+                    <div
+                      className={`h-full  ${lineWidth} left-[50%] top-[80px] ${lineColor} absolute`}
+                    />
+                  </div>
+                )}
                 <div className="rounded-lg relative">
                   {member.id !== origin && (
                     <ConnectLines len={len} index={index} />
@@ -82,14 +102,16 @@ const ViewTree = () => {
                   />
                 </>
               )}
-              {children && children.length > 0 && (
-                <div
-                  className={`h-12  ${lineWidth} left-[50%] top-[80px] ${lineColor} absolute`}
-                />
-              )}
-              <div className="flex ">
+
+              <div className="flex justify-center relative">
+                {/* {member.id !== origin && children?.length > 0 && (
+                  <div
+                    style={{ width: "47%" }}
+                    className={`${lineHeight} w- [${`${getPercent()}`}%] left-[75px] top-[-18px] ${lineColor} absolute`}
+                  />
+                )}{" "} */}
                 {children && children.length > 0 && (
-                  <div className="flex p-0.5 rounded-lg">
+                  <div className="flex p-0.5 rounded-lg ">
                     {children &&
                       children.map(
                         (cldId: string, index: number) =>
