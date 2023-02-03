@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { GetFamily } from "../../../APIs/familyApis";
 import { setMembers } from "../../../hooks/reducers/membersReducer";
+import GetCookie from "../../../hooks/getCookie";
 
 const FamilyListForm: React.FC = () => {
   const dispatch = useDispatch();
@@ -23,7 +24,17 @@ const FamilyListForm: React.FC = () => {
       // toast.success(data?.message, {
       //   containerId: "top-right",
       // });
-      navigate("/FamilyTree/Family/" + data.id);
+
+      // const params = {
+      //   color: "blue",
+      // };
+      // const options = {
+      //   pathname: "/FamilyTree/Family",
+      //   id: `?${GetCookie("activeFamilyID")}`,
+      // };
+      // navigate(options, { replace: true });
+
+      navigate("/FamilyTree/Family/" + GetCookie("activeFamilyID"));
     }
   };
 

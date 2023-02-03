@@ -41,6 +41,7 @@ root.render(
           <Route index path="/logout" element={<Logout />} />
           <Route index path="/home" element={<Home />} />
           <Route index path="/FamilyTree/List" element={<FamilyList />} />
+          <Route index path="/FamilyTree/Family" element={<ViewTree />} />
           <Route index path="/FamilyTree/Family/:id" element={<ViewTree />} />
           <Route index path="/" element={<Home />} />
         </Routes>

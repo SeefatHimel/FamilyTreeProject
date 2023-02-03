@@ -12,6 +12,34 @@ const apiEndpoint = localHost
   : process.env.REACT_APP_API_URL;
 console.log("🚀 ~ file: index.ts:12 ~ process.env", process.env);
 
+export async function GetFamilyDetails(familyId: any) {
+  console.log(
+    "🚀 ~ file: familyApis.ts:15 ~ GetFamilyDetails ~ familyId",
+    familyId
+  );
+  try {
+    const { data } = await axios.get(
+      apiEndpoint + "familyTree/getDetails",
+      // familyId
+      { params: { familyId: familyId }, withCredentials: true }
+    );
+    console.log(
+      "🚀 ~ file: familyApis.ts:18 ~ GetFamilyDetails ~ data",
+      data.id
+    );
+    if (data?.id) SetCookie("activeFamilyID", data.id);
+    toast.success(data?.message, {
+      containerId: "top-right",
+    });
+    return data?.details;
+  } catch (error: any) {
+    const { data } = error.response;
+
+    toast.error(data?.message, {
+      containerId: "top-right",
+    });
+  }
+}
 export async function GetFamily(values: any) {
   console.log("🚀 ~ file: familyApis.ts:15 ~ GetFamily ~ values", values);
   try {
@@ -40,6 +68,30 @@ export async function AddFamilyMember(data: any, memId: string) {
     });
     console.log(
       "🚀 ~ file: familyApis.ts:41 ~ AddFamilyMember ~ response",
+      response
+    );
+    if (response?.data) {
+      toast.success(response?.data?.message, {
+        containerId: "top-right",
+      });
+    }
+  } catch (error: any) {
+    console.log("🚀 ~ file: familyApis.ts:51 ~ AddFamilyMember ~ error", error);
+    toast.error(error?.response?.data?.message, {
+      containerId: "top-right",
+    });
+  }
+  console.log("<><><><>><><>");
+}
+
+export async function AddOriginFamilyMember(data: any) {
+  try {
+    const response = await axios.post(apiEndpoint + "familyTree/add/origin", {
+      familyId: GetCookie("activeFamilyID"),
+      data,
+    });
+    console.log(
+      "🚀 ~ file: familyApis.ts:41 ~ AddOriginFamilyMember ~ response",
       response
     );
     if (response?.data) {

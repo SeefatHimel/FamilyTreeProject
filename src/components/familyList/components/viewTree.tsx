@@ -1,22 +1,33 @@
 import GenComponent from "../../genes/genComponent";
-import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
 import ConnectLines from "./connectingLines";
+import AddMemberModal from "../../modal/addMemberModal";
+import { Button } from "antd";
+import GetCookie from "../../../hooks/getCookie";
+import { GetFamilyDetails } from "../../../APIs/familyApis";
+import { setMembers } from "../../../hooks/reducers/membersReducer";
 
 const ViewTree = () => {
+  const dispatch = useDispatch();
   const familyDetails = useSelector(
     (state: any) => state?.members?.MembersList
   );
-  const [origin, setOrigin] = useState(familyDetails.members[0].id);
+  // const [familyDetails, setFamilydetails] = useState(
+  //   useSelector((state: any) => state?.members?.MembersList)
+  // );
+  const [origin, setOrigin] = useState(familyDetails?.members[0]?.id);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   console.log(
     "🚀 ~ file: viewTree.tsx:6 ~ ViewTree ~ familyDetails",
     familyDetails
   );
 
   const lineColor = "bg-green-600";
-  const lineWidth = "0.5";
-  const horizontalLine = `h-${lineWidth} w-full left-[50%] top-[-20px] ${lineColor} absolute`;
-  const verticalLine = `h-${lineWidth} w-full left-[-50%] top-[-20px] ${lineColor} absolute`;
+  const lineWidth = "px-[1px]";
+  const lineHeight = "py-[1px]";
+  const horizontalLine = `${lineHeight} w-full left-[50%] top-[-20px] ${lineColor} absolute`;
+  // const verticalLine = `${lineHeight} w-full left-[-50%] top-[-20px] ${lineColor} absolute`;
   function getMember(id: string) {
     for (let i = 0; i < familyDetails.members.length; i++) {
       if (familyDetails.members[i].id === id) return familyDetails.members[i];
@@ -64,16 +75,16 @@ const ViewTree = () => {
               {spouse && (
                 <>
                   <div
-                    className={`h-${lineWidth}  w-3 left-[50%] top-[80px] bg-cyan-500 absolute`}
+                    className={`${lineHeight}  w-3 left-[50%] top-[80px] ${lineColor} absolute`}
                   />
                   <div
-                    className={`h-${lineWidth}  w-2.5 right-[50%] top-[80px] bg-cyan-500 absolute`}
+                    className={`${lineHeight}  w-2.5 right-[50%] top-[80px] ${lineColor} absolute`}
                   />
                 </>
               )}
               {children && children.length > 0 && (
                 <div
-                  className={`h-12  w-${lineWidth} left-[50%] top-[80px] bg-cyan-500 absolute`}
+                  className={`h-12  ${lineWidth} left-[50%] top-[80px] ${lineColor} absolute`}
                 />
               )}
               <div className="flex ">
@@ -95,20 +106,62 @@ const ViewTree = () => {
     );
   };
 
-  return (
-    <div className="mx-auto w-full">
-      <div>Family Name : {familyDetails.name}</div>
-      <div>Total members : {familyDetails.members.length} </div>
-      {/* {familyDetails &&
+  const getFamilyDetails = async () => {
+    const familyId = GetCookie("activeFamilyID");
+    const data = await GetFamilyDetails(familyId);
+    if (!origin && data.members) {
+      setOrigin(data.members[0].id);
+    }
+    if (data) dispatch(setMembers(data));
+
+    // setFamilydetails(data);
+    console.log("🚀 ~ file: viewTree.tsx:115 ~ getFamilyDetails ~ data", data);
+  };
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    console.log(path.includes(""));
+    if (familyDetails === null) {
+      getFamilyDetails();
+    }
+  });
+  console.log(
+    "🚀 ~ file: viewTree.tsx:155 ~ ViewTree ~ familyDetails",
+    familyDetails
+  );
+
+  return familyDetails ? (
+    <div>
+      <div className="mx-auto w-full">
+        <div>Family Name : {familyDetails.name}</div>
+        <div>Total members : {familyDetails.members.length} </div>
+        {/* {familyDetails &&
         familyDetails.members.map((member: any) => (
           <GenComponent member={member} />
         ))} */}
-      {
-        <div className="mx-auto w-min">
-          {BuildTree(getMember(origin), 0, 0)}
-        </div>
-      }
+        {familyDetails.members.length > 0 && origin ? (
+          <div className="mx-auto w-min">
+            {BuildTree(getMember(origin), 0, 0)}
+          </div>
+        ) : (
+          <Button
+            type="primary"
+            // disabled={member.gender !== "male"}
+            className="p-0.5 bg-green-600"
+            onClick={() => setIsAddModalOpen(true)}
+          >
+            Add
+          </Button>
+        )}
+      </div>
+      <AddMemberModal
+        isModalOpen={isAddModalOpen}
+        setIsModalOpen={setIsAddModalOpen}
+        member={null}
+      />
     </div>
+  ) : (
+    <>No Data</>
   );
 };
 
