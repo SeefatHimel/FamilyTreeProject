@@ -25,7 +25,7 @@ export async function GetFamilyDetails(familyId: any) {
     );
     console.log(
       "🚀 ~ file: familyApis.ts:18 ~ GetFamilyDetails ~ data",
-      data.id
+      data
     );
     if (data?.id) SetCookie("activeFamilyID", data.id);
     toast.success(data?.message, {
