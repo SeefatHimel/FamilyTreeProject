@@ -109,8 +109,8 @@ const ViewTree = () => {
   const getFamilyDetails = async () => {
     const familyId = GetCookie("activeFamilyID");
     const data = await GetFamilyDetails(familyId);
-    if (!origin && data.members) {
-      setOrigin(data.members[0].id);
+    if (!origin && data.members.length > 0) {
+      setOrigin(data?.members[0]?.id);
     }
     if (data) dispatch(setMembers(data));
 
