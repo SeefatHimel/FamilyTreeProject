@@ -91,9 +91,12 @@ const EditMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
             />
           </div>
           <Form.Item
+            validateStatus={validImage ? "success" : "error"}
+            hasFeedback
             initialValue={member.imgLink}
             name="imgLink"
             label="Image"
+            help="Input a Valid Image Link"
             rules={[{ required: true }]}
           >
             <Input

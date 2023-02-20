@@ -1,6 +1,7 @@
 import { Button, Form, Image, Input, Modal, Select } from "antd";
 import { useState } from "react";
 import { AddFamilyMember, AddOriginFamilyMember } from "../../APIs/familyApis";
+import { handleCheckValidity } from "../../services/checkImageLinkValidity";
 const { Option } = Select;
 
 type Props = {
@@ -10,6 +11,7 @@ type Props = {
 };
 
 const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
+  const [validImage, setValidImage] = useState<boolean>(false);
   const memId = member?.id;
   const handleOk = () => {
     setIsModalOpen(false);
@@ -42,7 +44,7 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
     form.resetFields();
   };
 
-  const [imgLink, setImglink] = useState<string>("");
+  const [imgLink, setImgLink] = useState<string>("");
 
   return (
     <>
@@ -63,9 +65,37 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
           <Form.Item name="name" label="Name" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Image src={imgLink} alt="Error"></Image>
-          <Form.Item name="imgLink" label="Image" rules={[{ required: true }]}>
-            <Input onChange={(e) => setImglink(e.target.value)} />
+          <div className="h-[100px] w-fit mx-auto mb-3 rounded-full border-2 border-red-600  flex items-center justify-center overflow-hidden">
+            <Image
+              width={100}
+              src={`${imgLink}`}
+              alt="Invalid Image"
+              preview={{ mask: false }}
+              fallback="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrqaGgivHe2_fIOSNQcC0aqIvkG2zUrR0qEQ&usqp=CAU"
+            />
+          </div>
+          <Form.Item
+            validateStatus={validImage ? "success" : "error"}
+            hasFeedback
+            name="imgLink"
+            label="Image"
+            help={validImage ? "" : "Input a Valid Image Link"}
+            rules={[{ required: true }]}
+          >
+            <Input
+              className="flex items-center justify-center text-center"
+              onChange={async (e) => {
+                setImgLink(e.target.value);
+                const resp = await handleCheckValidity(e.target.value);
+                console.log(
+                  "🚀 ~ file: addMemberModal.tsx:89 ~ onChange={ ~ resp:",
+                  resp
+                );
+                if (resp) {
+                  !validImage && setValidImage(!validImage);
+                } else validImage && setValidImage(!validImage);
+              }}
+            />
           </Form.Item>
 
           {member && (

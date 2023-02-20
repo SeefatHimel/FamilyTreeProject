@@ -9,15 +9,16 @@ export const handleCheckValidity = async (imageLink: string) => {
       img.src = url;
     });
   }
-  isImageURL(imageLink)
+  let valid = false;
+  await isImageURL(imageLink)
     .then(() => {
       console.log("Valid image URL");
-      return true;
+      valid = true;
     })
     .catch(() => {
       console.log("Invalid image URL");
       toast.error("Invalid image URL");
-      return false;
+      valid = false;
     });
-  return true;
+  return valid;
 };
