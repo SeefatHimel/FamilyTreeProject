@@ -15,3 +15,7 @@
   margin: auto;
   width: 400px;
 }
+
+.ant-input-suffix {
+  margin-top: -5px;
+}
