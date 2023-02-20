@@ -23,10 +23,7 @@ export async function GetFamilyDetails(familyId: any) {
       // familyId
       { params: { familyId: familyId }, withCredentials: true }
     );
-    console.log(
-      "🚀 ~ file: familyApis.ts:18 ~ GetFamilyDetails ~ data",
-      data
-    );
+    console.log("🚀 ~ file: familyApis.ts:18 ~ GetFamilyDetails ~ data", data);
     if (data?.id) SetCookie("activeFamilyID", data.id);
     toast.success(data?.message, {
       containerId: "top-right",
@@ -147,6 +144,21 @@ export async function UpdateFamilyMember(data: any) {
       "🚀 ~ file: familyApis.ts:51 ~ UpdateFamilyMember ~ error",
       error
     );
+    toast.error(error?.response?.data?.message, {
+      containerId: "top-right",
+    });
+    return false;
+  }
+}
+
+export async function UploadImage(formData: any) {
+  try {
+    await axios.post(apiEndpoint + "upload", formData).then((response) => {
+      console.log(response.data);
+    });
+  } catch (error: any) {
+    console.log("🚀 ~ file: familyApis.ts:157 ~ UploadImage ~ error", error);
+
     toast.error(error?.response?.data?.message, {
       containerId: "top-right",
     });

@@ -1,6 +1,7 @@
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import HomePage from "../pages";
+import UploadForm from "./imageUpload";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -21,6 +22,9 @@ const Home = () => {
           View Family Tree
         </Button>
       </div>
+      <UploadForm />
+
+      <Button>Get Image</Button>
     </div>
   );
 };
