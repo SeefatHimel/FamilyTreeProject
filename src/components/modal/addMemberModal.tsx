@@ -1,4 +1,5 @@
-import { Button, Form, Input, Modal, Select } from "antd";
+import { Button, Form, Image, Input, Modal, Select } from "antd";
+import { useState } from "react";
 import { AddFamilyMember, AddOriginFamilyMember } from "../../APIs/familyApis";
 const { Option } = Select;
 
@@ -41,6 +42,8 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
     form.resetFields();
   };
 
+  const [imgLink, setImglink] = useState<string>("");
+
   return (
     <>
       <Modal
@@ -60,9 +63,9 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
           <Form.Item name="name" label="Name" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-
+          <Image src={imgLink} alt="Error"></Image>
           <Form.Item name="imgLink" label="Image" rules={[{ required: true }]}>
-            <Input />
+            <Input onChange={(e) => setImglink(e.target.value)} />
           </Form.Item>
 
           {member && (

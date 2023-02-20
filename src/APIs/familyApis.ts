@@ -7,6 +7,7 @@ import SetCookie from "../hooks/setCookie";
 
 // const apiEndpoint = "https://login-backend-himel.onrender.com/";
 const localHost = process.env.NODE_ENV === "development" ? true : false;
+const apiEndpoint2 = "https://familytreebackenddev.onrender.com/";
 const apiEndpoint = localHost
   ? process.env.REACT_APP_API_URL_LOCAL
   : process.env.REACT_APP_API_URL;
@@ -72,6 +73,7 @@ export async function AddFamilyMember(data: any, memId: string) {
         containerId: "top-right",
       });
     }
+    window.location.reload();
   } catch (error: any) {
     console.log("🚀 ~ file: familyApis.ts:51 ~ AddFamilyMember ~ error", error);
     toast.error(error?.response?.data?.message, {
@@ -138,6 +140,7 @@ export async function UpdateFamilyMember(data: any) {
         containerId: "top-right",
       });
     }
+    // window.location.reload();
     return true;
   } catch (error: any) {
     console.log(
@@ -156,6 +159,24 @@ export async function UploadImage(formData: any) {
     await axios.post(apiEndpoint + "upload", formData).then((response) => {
       console.log(response.data);
     });
+  } catch (error: any) {
+    console.log("🚀 ~ file: familyApis.ts:157 ~ UploadImage ~ error", error);
+
+    toast.error(error?.response?.data?.message, {
+      containerId: "top-right",
+    });
+    return false;
+  }
+}
+
+export async function GetImage() {
+  try {
+    const res: any = await axios.get(apiEndpoint + "download");
+    console.log("🚀 ~ file: familyApis.ts:172 ~ GetImage ~ res", res);
+    // .then((response) => {
+    //   console.log(response.data);
+    // });
+    return res?.data?.data;
   } catch (error: any) {
     console.log("🚀 ~ file: familyApis.ts:157 ~ UploadImage ~ error", error);
 

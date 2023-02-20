@@ -1,5 +1,5 @@
 // import { UserOutlined } from "@ant-design/icons";
-import { Card, Avatar, Button } from "antd";
+import { Card, Button, Image } from "antd";
 import { useState } from "react";
 import { DeleteFamilyMember } from "../../APIs/familyApis";
 import AddMemberModal from "../modal/addMemberModal";
@@ -36,12 +36,14 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
           ---
         </Button>
         <div className="flex flex-col items-center relative">
-          <div className="absolute">
-            <Avatar
-              size={64}
+          <div className="absolute top-[-2px] z-20 h-16 w-16 overflow-hidden rounded-full">
+            <Image
               src={member.imgLink}
               alt="Error"
               className="z-20"
+              preview={{
+                mask: false,
+              }}
             />
           </div>
           {/* <Avatar size={64} icon={<UserOutlined />} />{" "} */}

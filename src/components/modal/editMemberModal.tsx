@@ -1,9 +1,13 @@
-import { Button, Form, Input, Modal } from "antd";
-import { UpdateFamilyMember } from "../../APIs/familyApis";
+import { Button, Form, Image, Input, Modal } from "antd";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import { handleCheckValidity } from "../../services/checkImageLinkValidity";
 // import { useState } from "react";
 // const { Option } = Select;
 
 const EditMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
+  const [imgLink, setImgLink] = useState<string>(member.imgLink);
+  const [validImage, setValidImage] = useState<boolean>(false);
   // const memId = member.id;
   // const [gender, setGerder] = useState(member.gender);
   const handleOk = () => {
@@ -23,24 +27,36 @@ const EditMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
   const [form] = Form.useForm();
 
   const onFinish = async (values: any) => {
-    const tmp = { ...member };
-    tmp.name = values.name;
-    tmp.imgLink = values.imgLink;
-    // tmp.gender = values.gender;
-    console.log(
-      "🚀 ~ file: editMemberModal.tsx:27 ~ onFinish ~ member",
-      member
-    );
-    console.log("🚀 ~ file: editMemberModal.tsx:27 ~ onFinish ~ tmp", tmp);
-    const updated = await UpdateFamilyMember(tmp);
-    console.log(updated);
-    if (updated) setIsModalOpen(false);
+    // const tmp = { ...member };
+    // tmp.name = values.name;
+    // tmp.imgLink = values.imgLink;
+    // // tmp.gender = values.gender;
+    // console.log(
+    //   "🚀 ~ file: editMemberModal.tsx:27 ~ onFinish ~ member",
+    //   member
+    // );
+    // console.log("🚀 ~ file: editMemberModal.tsx:27 ~ onFinish ~ tmp", tmp);
+    // const updated = await UpdateFamilyMember(tmp);
+    // console.log(updated);
+    // // window.location.reload();
+    // if (updated) setIsModalOpen(false);
+    toast.error("Please input a Valid Image Link");
   };
 
   const onReset = () => {
     form.resetFields();
   };
 
+  const initialImageCheck = async () => {
+    if (await handleCheckValidity(imgLink)) {
+      !validImage && setValidImage(!validImage);
+    } else validImage && setValidImage(!validImage);
+  };
+
+  useEffect(() => {
+    initialImageCheck();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <>
       <Modal
@@ -65,14 +81,29 @@ const EditMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
           >
             <Input />
           </Form.Item>
-
+          <div className="h-[100px] w-fit mx-auto mb-3 rounded-full border-2 border-red-600  flex items-center justify-center overflow-hidden">
+            <Image
+              width={100}
+              src={`${imgLink}`}
+              alt="Invalid Image"
+              preview={{ mask: false }}
+              fallback="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrqaGgivHe2_fIOSNQcC0aqIvkG2zUrR0qEQ&usqp=CAU"
+            />
+          </div>
           <Form.Item
             initialValue={member.imgLink}
             name="imgLink"
             label="Image"
             rules={[{ required: true }]}
           >
-            <Input />
+            <Input
+              onChange={async (e) => {
+                setImgLink(e.target.value);
+                if (await handleCheckValidity(e.target.value)) {
+                  !validImage && setValidImage(!validImage);
+                } else validImage && setValidImage(!validImage);
+              }}
+            />
           </Form.Item>
 
           {/* <Form.Item
@@ -110,13 +141,12 @@ const EditMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
             }
           </Form.Item> */}
           <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit">
+            <Button className="mr-2" htmlType="submit">
               Submit
             </Button>
-            <Button htmlType="button" danger onClick={onReset}>
+            <Button className="mr-2" htmlType="button" danger onClick={onReset}>
               Reset
             </Button>
-
             <Button htmlType="button" onClick={handleCancel}>
               Cancel
             </Button>
