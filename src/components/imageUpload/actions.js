@@ -46,3 +46,13 @@ export const resizeImage = (file, maxWidth, maxHeight) => {
     };
   });
 };
+
+export const GetFormData = (file) => {
+  if (file) {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    console.log("🚀 ~ file: index.tsx:15 ~ handleSubmit ~ formData", formData);
+    return formData;
+  } else return null;
+};

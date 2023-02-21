@@ -1,5 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import { GetFormData } from "../components/imageUpload/actions";
 import GetCookie from "../hooks/getCookie";
 // import GetCookie from "../hooks/getCookie";
 // import { RemoveAllCookies } from "../hooks/removeCookie";
@@ -57,13 +58,20 @@ export async function GetFamily(values: any) {
   }
 }
 
-export async function AddFamilyMember(data: any, memId: string) {
-  try {
-    const response = await axios.post(apiEndpoint + "familyTree/add", {
+export async function AddFamilyMember(data: any, file: any, memId: string) {
+  const formData = new FormData();
+  formData.append(
+    "data",
+    JSON.stringify({
+      formData: formData,
       familyId: GetCookie("activeFamilyID"),
       data,
       memId,
-    });
+    })
+  );
+  formData.append("image", file);
+  try {
+    const response = await axios.post(apiEndpoint + "familyTree/add", formData);
     console.log(
       "🚀 ~ file: familyApis.ts:41 ~ AddFamilyMember ~ response",
       response

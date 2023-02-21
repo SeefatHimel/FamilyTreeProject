@@ -5,7 +5,7 @@ import { resizeImage } from "./actions";
 
 const UploadForm = () => {
   const [file, setFile] = useState<any>(null);
-  console.log("🚀 ~ file: index.tsx:7 ~ UploadForm ~ file", file);
+  // console.log("🚀 ~ file: index.tsx:7 ~ UploadForm ~ file", file);
 
   const handleFileChange = async (event: any) => {
     const resizedImage = await resizeImage(event.target.files[0], 800, 800);

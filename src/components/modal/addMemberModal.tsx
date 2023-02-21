@@ -1,7 +1,8 @@
-import { Button, Form, Image, Input, Modal, Select } from "antd";
+import { Button, Form, Image, Input, Modal, Select, Switch } from "antd";
 import { useState } from "react";
 import { AddFamilyMember, AddOriginFamilyMember } from "../../APIs/familyApis";
 import { handleCheckValidity } from "../../services/checkImageLinkValidity";
+import { GetFormData, resizeImage } from "../imageUpload/actions";
 const { Option } = Select;
 
 type Props = {
@@ -12,6 +13,7 @@ type Props = {
 
 const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
   const [validImage, setValidImage] = useState<boolean>(false);
+  const [imageType, setImageType] = useState<string>("file");
   const memId = member?.id;
   const handleOk = () => {
     setIsModalOpen(false);
@@ -30,18 +32,51 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
 
   const onFinish = async (values: any) => {
     if (member) {
-      const response = await AddFamilyMember(values, memId);
+      const response = await AddFamilyMember(values, file, memId);
       console.log("🚀 ~ file: modal.tsx:25 ~ onFinish ~ response", response);
     } else {
       const response = await AddOriginFamilyMember(values);
       console.log("🚀 ~ file: modal.tsx:25 ~ onFinish ~ response", response);
     }
-    console.log(values);
-    setIsModalOpen(false);
+    console.log(values, file);
+    // setIsModalOpen(false);
   };
-
+  const onFinishFailed = (errorInfo: any) => {
+    console.log("Failed:", errorInfo);
+  };
   const onReset = () => {
     form.resetFields();
+  };
+  const onChangeSwitch = (checked: boolean) => {
+    setImageType(checked ? "file" : "link");
+    setImgLink("");
+    setImageSrc("");
+    setFile(null);
+    console.log(`switch to ${checked ? "file" : "link"}`);
+  };
+
+  const validateLink = async (rule: any, value: any) => {
+    const resp = await handleCheckValidity(value);
+    if (!value || value === "") {
+      return Promise.reject("You must enter a image");
+    } else if (!resp) {
+      return Promise.reject("Please enter a valid image Link");
+    } else {
+      return Promise.resolve();
+    }
+  };
+  const [imageSrc, setImageSrc] = useState("");
+  const [file, setFile] = useState<any>(null);
+  // console.log("🚀 ~ file: index.tsx:7 ~ UploadForm ~ file", file);
+
+  const handleFileChange = async (event: any) => {
+    const resizedImage = await resizeImage(event.target.files[0], 800, 800);
+    console.log(
+      "🚀 ~ file: addMemberModal.tsx:70 ~ handleFileChange ~ resizedImage:",
+      resizedImage
+    );
+    setFile(resizedImage);
+    setImageSrc(URL.createObjectURL(resizedImage));
   };
 
   const [imgLink, setImgLink] = useState<string>("");
@@ -60,44 +95,85 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
           form={form}
           name="control-hooks"
           onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
           style={{ maxWidth: 600 }}
         >
           <Form.Item name="name" label="Name" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <div className="h-[100px] w-fit mx-auto mb-3 rounded-full border-2 border-red-600  flex items-center justify-center overflow-hidden">
-            <Image
-              width={100}
-              src={`${imgLink}`}
-              alt="Invalid Image"
-              preview={{ mask: false }}
-              fallback="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrqaGgivHe2_fIOSNQcC0aqIvkG2zUrR0qEQ&usqp=CAU"
-            />
-          </div>
-          <Form.Item
-            validateStatus={validImage ? "success" : "error"}
-            hasFeedback
-            name="imgLink"
-            label="Image"
-            help={validImage ? "" : "Input a Valid Image Link"}
-            rules={[{ required: true }]}
-          >
-            <Input
-              className="flex items-center justify-center text-center"
-              onChange={async (e) => {
-                setImgLink(e.target.value);
-                const resp = await handleCheckValidity(e.target.value);
-                console.log(
-                  "🚀 ~ file: addMemberModal.tsx:89 ~ onChange={ ~ resp:",
-                  resp
-                );
-                if (resp) {
-                  !validImage && setValidImage(!validImage);
-                } else validImage && setValidImage(!validImage);
-              }}
-            />
-          </Form.Item>
-
+          <Switch
+            checkedChildren={<>File</>}
+            unCheckedChildren={<>Link</>}
+            defaultChecked
+            className="bg-green-600 hover:bg-green-400 absolute right-8"
+            onChange={onChangeSwitch}
+          />
+          {imageType === "link" && (
+            <div>
+              <div className="h-[100px] w-fit mx-auto mb-3 rounded-full border-2 border-red-600  flex items-center justify-center overflow-hidden">
+                <Image
+                  width={100}
+                  src={`${imgLink}`}
+                  alt="Invalid Image"
+                  preview={{ mask: false }}
+                  fallback="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrqaGgivHe2_fIOSNQcC0aqIvkG2zUrR0qEQ&usqp=CAU"
+                />
+              </div>
+              <Form.Item
+                // validateStatus={validImage ? "success" : "error"}
+                hasFeedback
+                name="imgLink"
+                label="Image"
+                validateFirst
+                rules={[
+                  // { required: true },
+                  {
+                    validator: validateLink,
+                    // message: "Enter a valid email",
+                  },
+                ]}
+                // help={
+                //   validImage || imgLink.length === 0
+                //     ? ""
+                //     : "Input a Valid Image Link"
+                // }
+              >
+                <Input
+                  className="flex items-center justify-center text-center"
+                  onChange={async (e) => {
+                    setImgLink(e.target.value);
+                    const resp = await handleCheckValidity(e.target.value);
+                    console.log(
+                      "🚀 ~ file: addMemberModal.tsx:89 ~ onChange={ ~ resp:",
+                      resp
+                    );
+                    if (resp) {
+                      !validImage && setValidImage(!validImage);
+                    } else validImage && setValidImage(!validImage);
+                  }}
+                />
+              </Form.Item>
+            </div>
+          )}
+          {imageType === "file" && (
+            <div className="mb-6">
+              <div className="h-[100px] w-fit mx-auto mb-3 rounded-full border-2 border-red-600  flex items-center justify-center overflow-hidden">
+                <Image
+                  width={100}
+                  src={`${imageSrc}`}
+                  alt="Invalid Image"
+                  preview={{ mask: false }}
+                  fallback="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrqaGgivHe2_fIOSNQcC0aqIvkG2zUrR0qEQ&usqp=CAU"
+                />
+              </div>
+              <Input
+                type="file"
+                required
+                className="flex justify-center pl-24"
+                onChange={handleFileChange}
+              />
+            </div>
+          )}
           {member && (
             <Form.Item
               name="relation"
