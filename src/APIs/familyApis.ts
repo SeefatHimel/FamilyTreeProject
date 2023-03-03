@@ -91,12 +91,27 @@ export async function AddFamilyMember(data: any, file: any, memId: string) {
   console.log("<><><><>><><>");
 }
 
-export async function AddOriginFamilyMember(data: any) {
-  try {
-    const response = await axios.post(apiEndpoint + "familyTree/add/origin", {
+export async function AddOriginFamilyMember(
+  data: any,
+  file: any,
+  memId: string
+) {
+  const formData = new FormData();
+  formData.append(
+    "data",
+    JSON.stringify({
+      formData: formData,
       familyId: GetCookie("activeFamilyID"),
       data,
-    });
+      memId,
+    })
+  );
+  formData.append("image", file);
+  try {
+    const response = await axios.post(
+      apiEndpoint + "familyTree/add/origin",
+      formData
+    );
     console.log(
       "🚀 ~ file: familyApis.ts:41 ~ AddOriginFamilyMember ~ response",
       response
@@ -137,19 +152,34 @@ export async function DeleteFamilyMember(memId: string) {
   }
 }
 
-export async function UpdateFamilyMember(data: any) {
-  try {
-    const response = await axios.put(apiEndpoint + "familyTree/update", {
+export async function UpdateFamilyMember(data: any, file: any) {
+  const formData = new FormData();
+  formData.append(
+    "data",
+    JSON.stringify({
+      formData: formData,
       familyId: GetCookie("activeFamilyID"),
       data,
-    });
+    })
+  );
+  file && formData.append("image", file);
+  try {
+    console.log(
+      "🚀 ~ file: familyApis.ts:141 ~ UpdateFamilyMember ~ formData:",
+      formData
+    );
+    const response = await axios.put(
+      apiEndpoint + "familyTree/update",
+      formData
+    );
     if (response?.data) {
       toast.success(response?.data?.message, {
         containerId: "top-right",
       });
     }
     // window.location.reload();
-    return true;
+    return false;
+    // return true;
   } catch (error: any) {
     console.log(
       "🚀 ~ file: familyApis.ts:51 ~ UpdateFamilyMember ~ error",

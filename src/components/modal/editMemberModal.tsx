@@ -1,13 +1,23 @@
-import { Button, Form, Image, Input, Modal } from "antd";
+import { Button, Form, Image, Input, Modal, Switch } from "antd";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { UpdateFamilyMember } from "../../APIs/familyApis";
 import { handleCheckValidity } from "../../services/checkImageLinkValidity";
+import { resizeImage } from "../imageUpload/actions";
 // import { useState } from "react";
 // const { Option } = Select;
 
 const EditMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
   const [imgLink, setImgLink] = useState<string>(member.imgLink);
   const [validImage, setValidImage] = useState<boolean>(false);
+  const [imageType, setImageType] = useState<string>(
+    member.imgLink ? "link" : "file"
+  );
+
+  const [imageSrc, setImageSrc] = useState(
+    "http://localhost:3000/" + member.imgPath
+  );
+  const [file, setFile] = useState<any>(null);
   // const memId = member.id;
   // const [gender, setGerder] = useState(member.gender);
   const handleOk = () => {
@@ -27,32 +37,58 @@ const EditMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
   const [form] = Form.useForm();
 
   const onFinish = async (values: any) => {
-    // const tmp = { ...member };
-    // tmp.name = values.name;
-    // tmp.imgLink = values.imgLink;
-    // // tmp.gender = values.gender;
-    // console.log(
-    //   "🚀 ~ file: editMemberModal.tsx:27 ~ onFinish ~ member",
-    //   member
-    // );
-    // console.log("🚀 ~ file: editMemberModal.tsx:27 ~ onFinish ~ tmp", tmp);
-    // const updated = await UpdateFamilyMember(tmp);
-    // console.log(updated);
-    // // window.location.reload();
-    // if (updated) setIsModalOpen(false);
+    console.log(
+      "🚀 ~ file: editMemberModal.tsx:39 ~ onFinish ~ values:",
+      values
+    );
+    const tmp = { ...member };
+    tmp.name = values.name;
+    tmp.imgLink = values.imgLink;
+    if (values.imgLink) tmp.imgPath = null;
+    // tmp.gender = values.gender;
+    console.log(
+      "🚀 ~ file: editMemberModal.tsx:27 ~ onFinish ~ member",
+      member
+    );
+    console.log("🚀 ~ file: editMemberModal.tsx:27 ~ onFinish ~ tmp", tmp);
+    const updated = await UpdateFamilyMember(tmp, file);
+    console.log(updated);
+    // window.location.reload();
+    if (updated) setIsModalOpen(false);
     toast.error("Please input a Valid Image Link");
   };
 
   const onReset = () => {
     form.resetFields();
   };
-
+  const handleFileChange = async (event: any) => {
+    const resizedImage = await resizeImage(event.target.files[0], 800, 800);
+    console.log(
+      "🚀 ~ file: addMemberModal.tsx:70 ~ handleFileChange ~ resizedImage:",
+      resizedImage
+    );
+    setFile(resizedImage);
+    setImageSrc(URL.createObjectURL(resizedImage));
+  };
   const initialImageCheck = async () => {
     if (await handleCheckValidity(imgLink)) {
       !validImage && setValidImage(!validImage);
     } else validImage && setValidImage(!validImage);
   };
-
+  const onChangeSwitch = (checked: boolean) => {
+    setImageType(checked ? "file" : "link");
+    console.log(`switch to ${checked ? "file" : "link"}`);
+  };
+  const validateLink = async (rule: any, value: any) => {
+    const resp = await handleCheckValidity(value);
+    if (!value || value === "") {
+      return Promise.reject("You must enter a image");
+    } else if (!resp) {
+      return Promise.reject("Please enter a valid image Link");
+    } else {
+      return Promise.resolve();
+    }
+  };
   useEffect(() => {
     initialImageCheck();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -81,33 +117,80 @@ const EditMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
           >
             <Input />
           </Form.Item>
-          <div className="h-[100px] w-fit mx-auto mb-3 rounded-full border-2 border-red-600  flex items-center justify-center overflow-hidden">
-            <Image
-              width={100}
-              src={`${imgLink}`}
-              alt="Invalid Image"
-              preview={{ mask: false }}
-              fallback="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrqaGgivHe2_fIOSNQcC0aqIvkG2zUrR0qEQ&usqp=CAU"
-            />
-          </div>
-          <Form.Item
-            validateStatus={validImage ? "success" : "error"}
-            hasFeedback
-            initialValue={member.imgLink}
-            name="imgLink"
-            label="Image"
-            help="Input a Valid Image Link"
-            rules={[{ required: true }]}
-          >
-            <Input
-              onChange={async (e) => {
-                setImgLink(e.target.value);
-                if (await handleCheckValidity(e.target.value)) {
-                  !validImage && setValidImage(!validImage);
-                } else validImage && setValidImage(!validImage);
-              }}
-            />
-          </Form.Item>
+          <Switch
+            checkedChildren={<>File</>}
+            unCheckedChildren={<>Link</>}
+            // defaultChecked
+            checked={imageType === "file"}
+            className="bg-green-600 hover:bg-green-400 absolute right-8"
+            onChange={onChangeSwitch}
+          />
+          {imageType === "link" && (
+            <div>
+              <div className="h-[100px] w-fit mx-auto mb-3 rounded-full border-2 border-red-600  flex items-center justify-center overflow-hidden">
+                <Image
+                  width={100}
+                  src={`${imgLink}`}
+                  alt="Invalid Image"
+                  preview={{ mask: false }}
+                  fallback="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrqaGgivHe2_fIOSNQcC0aqIvkG2zUrR0qEQ&usqp=CAU"
+                />
+              </div>
+              <Form.Item
+                // validateStatus={validImage ? "success" : "error"}
+                hasFeedback
+                name="imgLink"
+                label="Image"
+                validateFirst
+                rules={[
+                  // { required: true },
+                  {
+                    validator: validateLink,
+                    // message: "Enter a valid email",
+                  },
+                ]}
+                // help={
+                //   validImage || imgLink.length === 0
+                //     ? ""
+                //     : "Input a Valid Image Link"
+                // }
+              >
+                <Input
+                  className="flex items-center justify-center text-center"
+                  onChange={async (e) => {
+                    setImgLink(e.target.value);
+                    const resp = await handleCheckValidity(e.target.value);
+                    console.log(
+                      "🚀 ~ file: addMemberModal.tsx:89 ~ onChange={ ~ resp:",
+                      resp
+                    );
+                    if (resp) {
+                      !validImage && setValidImage(!validImage);
+                    } else validImage && setValidImage(!validImage);
+                  }}
+                />
+              </Form.Item>
+            </div>
+          )}
+          {imageType === "file" && (
+            <div className="mb-6">
+              <div className="h-[100px] w-fit mx-auto mb-3 rounded-full border-2 border-red-600  flex items-center justify-center overflow-hidden">
+                <Image
+                  width={100}
+                  src={`${imageSrc}`}
+                  alt="Invalid Image"
+                  preview={{ mask: false }}
+                  fallback="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrqaGgivHe2_fIOSNQcC0aqIvkG2zUrR0qEQ&usqp=CAU"
+                />
+              </div>
+              <Input
+                type="file"
+                required={false}
+                className="flex justify-center pl-24"
+                onChange={handleFileChange}
+              />
+            </div>
+          )}
 
           {/* <Form.Item
             initialValue={member.gender}

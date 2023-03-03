@@ -116,7 +116,6 @@ const ViewTree = () => {
   };
 
   useEffect(() => {
-    const path = window.location.pathname;
     if (familyDetails === null) {
       getFamilyDetails();
     }
@@ -143,10 +142,10 @@ const ViewTree = () => {
           <Button
             type="primary"
             // disabled={member.gender !== "male"}
-            className="p-0.5 bg-green-600"
+            className="p-1 bg-green-600"
             onClick={() => setIsAddModalOpen(true)}
           >
-            Add
+            Add Member
           </Button>
         )}
       </div>

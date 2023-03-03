@@ -35,11 +35,11 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
       const response = await AddFamilyMember(values, file, memId);
       console.log("🚀 ~ file: modal.tsx:25 ~ onFinish ~ response", response);
     } else {
-      const response = await AddOriginFamilyMember(values);
+      const response = await AddOriginFamilyMember(values, file, memId);
       console.log("🚀 ~ file: modal.tsx:25 ~ onFinish ~ response", response);
     }
     console.log(values, file);
-    // setIsModalOpen(false);
+    setIsModalOpen(false);
   };
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
@@ -84,7 +84,7 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
   return (
     <>
       <Modal
-        title="Basic Modal"
+        title="Add Member"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
