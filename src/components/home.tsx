@@ -1,14 +1,16 @@
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import HomePage from "../pages";
+import ImageShow from "./imageUpload/imgShow";
 
 const Home = () => {
   const navigate = useNavigate();
+
   return (
     <div className="p-6 w-full h-max bg-slate-400">
       <div className="w-full h-max">
-        <div className="text-center text-3xl folt-extrabold">Welcome</div>
-        <div className="text-center text-lg folt-bold w-1/2 mx-auto">
+        <div className="text-center text-3xl font-extrabold">Welcome</div>
+        <div className="text-center text-lg font-bold w-1/2 mx-auto">
           You have successfully logged in to our server.
         </div>
       </div>
@@ -21,6 +23,7 @@ const Home = () => {
           View Family Tree
         </Button>
       </div>
+      <ImageShow />
     </div>
   );
 };

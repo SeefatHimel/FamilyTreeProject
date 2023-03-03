@@ -1,11 +1,12 @@
 // import { UserOutlined } from "@ant-design/icons";
-import { Card, Avatar, Button } from "antd";
+import { Card, Button, Image } from "antd";
 import { useState } from "react";
 import { DeleteFamilyMember } from "../../APIs/familyApis";
 import AddMemberModal from "../modal/addMemberModal";
 import EditMemberModal from "../modal/editMemberModal";
 
 const GenComponent = ({ member, origin, setOrigin }: any) => {
+  // console.log("🚀 ~ file: genComponent.tsx:9 ~ GenComponent ~ member:", member);
   const [hovering, setHovering] = useState(false);
   const [options, setOptions] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -36,12 +37,19 @@ const GenComponent = ({ member, origin, setOrigin }: any) => {
           ---
         </Button>
         <div className="flex flex-col items-center relative">
-          <div className="absolute">
-            <Avatar
-              size={64}
-              src={member.imgLink}
+          <div className="absolute top-[-2px] z-20 h-16 w-16 overflow-hidden rounded-full">
+            <Image
+              src={
+                member.imgLink
+                  ? member.imgLink
+                  : "http://localhost:3000/" + member.imgPath
+              }
               alt="Error"
               className="z-20"
+              preview={{
+                mask: false,
+              }}
+              fallback="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrqaGgivHe2_fIOSNQcC0aqIvkG2zUrR0qEQ&usqp=CAU"
             />
           </div>
           {/* <Avatar size={64} icon={<UserOutlined />} />{" "} */}

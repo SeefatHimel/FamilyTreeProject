@@ -8,9 +8,12 @@ import GetCookie from "../../../hooks/getCookie";
 import { GetFamilyDetails } from "../../../APIs/familyApis";
 import { setMembers } from "../../../hooks/reducers/membersReducer";
 import SpouseConnectorLine from "./spouseConnector";
+import React from "react";
 
 const ViewTree = () => {
   const dispatch = useDispatch();
+  const [reload, setReload] = useState<boolean>(false);
+  const realoadData = () => setReload(!reload);
   const familyDetails = useSelector(
     (state: any) => state?.members?.MembersList
   );
@@ -19,10 +22,6 @@ const ViewTree = () => {
   // );
   const [origin, setOrigin] = useState(familyDetails?.members[0]?.id);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  console.log(
-    "🚀 ~ file: viewTree.tsx:6 ~ ViewTree ~ familyDetails",
-    familyDetails
-  );
 
   const lineColor = "bg-green-600";
   // const lineColor2 = "bg-red-600";
@@ -36,8 +35,6 @@ const ViewTree = () => {
   }
 
   const BuildTree = (member: any, len: number, index: number) => {
-    console.log("member", member);
-
     const spouse = member?.spouse[0] ? getMember(member?.spouse[0]) : null;
     const children =
       member?.children?.length > 0 ? member?.children : spouse?.children;
@@ -91,11 +88,12 @@ const ViewTree = () => {
                 {children && children.length > 0 && (
                   <div className="flex p-0.5 rounded-lg ">
                     {children &&
-                      children.map(
-                        (cldId: string, index: number) =>
-                          getMember(cldId) &&
-                          BuildTree(getMember(cldId), children.length, index)
-                      )}
+                      children.map((cldId: string, index: number) => (
+                        <React.Fragment key={cldId}>
+                          {getMember(cldId) &&
+                            BuildTree(getMember(cldId), children.length, index)}
+                        </React.Fragment>
+                      ))}
                   </div>
                 )}
               </div>
@@ -115,23 +113,20 @@ const ViewTree = () => {
     if (data) dispatch(setMembers(data));
 
     // setFamilydetails(data);
-    console.log("🚀 ~ file: viewTree.tsx:115 ~ getFamilyDetails ~ data", data);
   };
 
   useEffect(() => {
-    const path = window.location.pathname;
-    console.log(path.includes(""));
     if (familyDetails === null) {
       getFamilyDetails();
     }
   });
-  console.log(
-    "🚀 ~ file: viewTree.tsx:155 ~ ViewTree ~ familyDetails",
-    familyDetails
-  );
+
+  // useEffect(() => {
+  //   getFamilyDetails();
+  // }, [reload]);
 
   return familyDetails ? (
-    <div>
+    <div className="relative">
       <div className="mx-auto w-full">
         <div>Family Name : {familyDetails.name}</div>
         <div>Total members : {familyDetails.members.length} </div>
@@ -147,10 +142,10 @@ const ViewTree = () => {
           <Button
             type="primary"
             // disabled={member.gender !== "male"}
-            className="p-0.5 bg-green-600"
+            className="p-1 bg-green-600"
             onClick={() => setIsAddModalOpen(true)}
           >
-            Add
+            Add Member
           </Button>
         )}
       </div>
