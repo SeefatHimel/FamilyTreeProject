@@ -1,9 +1,9 @@
 import { LogoutOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
-import { LogOut } from "../APIs";
+import { LogOut } from "../../APIs";
 import { useDispatch } from "react-redux";
-import { resetUser } from "../hooks/reducers/userReducer";
+import { resetUser } from "../../hooks/reducers/userReducer";
 
 const LogOutButton = () => {
   const navigate = useNavigate();

@@ -1,8 +1,8 @@
-import { RootState } from "../storage/store";
+import { RootState } from "../../storage/store";
 import { useSelector } from "react-redux";
 import { Avatar, Button } from "antd";
 import { useNavigate } from "react-router-dom";
-import LogOutButton from "./logOutButton";
+import LogOutButton from "../auth/logOutButton";
 
 function Header() {
   const user = useSelector((state: RootState) => state.user.userDetails);
