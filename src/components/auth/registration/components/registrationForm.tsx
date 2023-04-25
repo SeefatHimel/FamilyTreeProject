@@ -1,8 +1,7 @@
-import React from "react";
-import { Button, Form, Input } from "antd";
-import { useState } from "react";
-import { toast } from "react-toastify";
+import { Form, Input, message } from "antd";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { CheckEmailValidity, RegisterUser } from "../../../../APIs/register";
 
 const RegistrationForm: React.FC = () => {
@@ -30,9 +29,7 @@ const RegistrationForm: React.FC = () => {
       const userRegistered = await RegisterUser(temp);
       if (userRegistered) navigate("/login");
     } else {
-      toast.error("email already Used", {
-        containerId: "top-right",
-      });
+      message.error("email already Used");
     }
   };
 
@@ -40,9 +37,7 @@ const RegistrationForm: React.FC = () => {
     console.log("Failed:", errorInfo);
     errorInfo &&
       errorInfo.errorFields.forEach((ef: any) => {
-        toast.error(ef.errors[0], {
-          containerId: "top-right",
-        });
+        message.error(ef.errors[0]);
       });
   };
 
@@ -51,7 +46,7 @@ const RegistrationForm: React.FC = () => {
       name="basic"
       // labelCol={{ span: 8 }}
       // wrapperCol={{ span: 16 }}
-      className="w-[350px]"
+      className="w-[350px] mx-auto"
       initialValues={{ remember: true }}
       onFinish={onFinish}
       onValuesChange={(e) => setEmailStatus("validating")}
@@ -156,7 +151,7 @@ const RegistrationForm: React.FC = () => {
 
       <Form.Item>
         <button className="flex w-full flex-none items-center justify-center rounded-lg border-2 border-black bg-black px-3 py-2 font-medium text-white md:px-4 md:py-3">
-          Login
+          Sign Up
         </button>
       </Form.Item>
     </Form>

@@ -1,23 +1,19 @@
+import "./index.css";
+import "react-toastify/dist/ReactToastify.css";
+
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
-import "./index.css";
-import App from "./App";
-import Login from "./components/auth/login";
-import Logout from "./pages";
-import Home from "./components/home";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import Header from "./components/nav/header";
-
 import { Provider } from "react-redux";
-import { store } from "./storage/store";
-import InitialLoading from "./components/InitialLoading";
-import ViewTree from "./components/familyList/components/viewTree";
-import FamilyList from "./components/familyList";
-import CustomLayout from "./layout";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+import Login from "./components/auth/login";
 import Registration from "./components/auth/registration";
+import FamilyList from "./components/familyList";
+import ViewTree from "./components/familyList/components/viewTree";
+import Home from "./components/home";
+import CustomLayout from "./layout";
+import Logout from "./pages";
+import { store } from "./storage/store";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -25,8 +21,8 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <CustomLayout>
-        <Router>
+      <BrowserRouter>
+        <CustomLayout>
           {/* <App /> */}
           <Routes>
             <Route index path="/login" element={<Login />} />
@@ -38,8 +34,8 @@ root.render(
             <Route index path="/FamilyTree/Family/:id" element={<ViewTree />} />
             <Route index path="/" element={<Home />} />
           </Routes>
-        </Router>
-      </CustomLayout>
+        </CustomLayout>
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>
 );

@@ -1,5 +1,7 @@
+import { message } from "antd";
 import axios from "axios";
 import { toast } from "react-toastify";
+
 import GetCookie from "../hooks/getCookie";
 import { RemoveAllCookies } from "../hooks/removeCookie";
 import SetCookie from "../hooks/setCookie";
@@ -30,9 +32,7 @@ export async function LogOut() {
     const { data } = await axios.post(apiEndpoint + "logout");
     console.log(data);
     RemoveAllCookies();
-    toast.success(data.message, {
-      containerId: "top-right",
-    });
+    message.success(data.message);
     return true;
   } catch (error: any) {
     return false;
@@ -43,9 +43,7 @@ export async function GetJwtAccessToken() {
   const refreshToken = GetCookie("refreshToken");
   if (!refreshToken) {
     console.log("logout");
-    toast.error("Response Token not found", {
-      containerId: "top-right",
-    });
+    message.error("Response Token not found");
     return false;
   } else {
     const response = await axios.post(apiEndpoint + "token", {
@@ -110,7 +108,7 @@ export async function GetData() {
             containerId: "top-right",
           });
       console.log("GotJwtAccessToken", GotJwtAccessToken);
-      if(!GotJwtAccessToken) return -1;
+      if (!GotJwtAccessToken) return -1;
     } else {
       toast.error(error?.response?.data?.message, {
         containerId: "top-right",

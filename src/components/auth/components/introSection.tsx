@@ -1,7 +1,10 @@
+import { useNavigate } from "react-router-dom";
+
 type Props = {
   link: string;
 };
 const IntroSection = ({ link }: Props) => {
+  const navigate = useNavigate();
   return (
     <div className="m-4 hidden flex-col justify-between bg-blue-600 text-white lg:flex lg:max-w-sm lg:p-8 xl:max-w-lg xl:p-12">
       <div className="flex items-center justify-start space-x-3">
@@ -20,12 +23,12 @@ const IntroSection = ({ link }: Props) => {
         <p className="text-lg">
           {link === "registration" ? "Don't " : "Already"} have an account?
         </p>
-        <a
-          href={`/${link}`}
+        <button
+          onClick={() => navigate(`/${link}`)}
           className="flex w-full flex-none items-center justify-center rounded-lg border-2 border-black bg-black px-3 py-2 font-medium text-white md:px-4 md:py-3"
         >
           {link === "registration" ? "Create account " : "Login "} here
-        </a>
+        </button>
       </div>
       <p className="font-medium">© 2023 Family Atlas</p>
     </div>

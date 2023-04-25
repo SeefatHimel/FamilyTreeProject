@@ -1,8 +1,9 @@
-import { LogoutOutlined } from "@ant-design/icons";
-import { Button } from "antd";
-import { useNavigate } from "react-router-dom";
-import { LogOut } from "../../APIs";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { LogoutOutlined } from "@ant-design/icons";
+
+import { LogOut } from "../../APIs";
 import { resetUser } from "../../hooks/reducers/userReducer";
 
 const LogOutButton = () => {
@@ -17,9 +18,10 @@ const LogOutButton = () => {
     }
   };
   return (
-    <Button type="primary" danger onClick={() => handleLogOut()}>
-      <LogoutOutlined /> Log out
-    </Button>
+    <button className="flex items-center gap-1" onClick={() => handleLogOut()}>
+      <LogoutOutlined />
+      <span className="text-[15px] font-semibold">Log out</span>
+    </button>
   );
 };
 

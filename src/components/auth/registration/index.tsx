@@ -1,14 +1,11 @@
-import Card from "antd/es/card/Card";
-// import { Button, Input } from "antd";
-import axios from "axios";
-import GoogleButton from "react-google-button";
-// import { UserOutlined, MailOutlined, KeyOutlined } from "@ant-design/icons";
-import RegistrationForm from "./components/registrationForm";
 import { Modal, Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
 import { useState } from "react";
+
+import { LoadingOutlined } from "@ant-design/icons";
+
 import { getAuthLink } from "../../../APIs";
 import IntroSection from "../components/introSection";
+import RegistrationForm from "./components/registrationForm";
 
 export const getLink = async () => {
   const res = await getAuthLink();
@@ -32,11 +29,9 @@ const Registration = () => {
             <div className="flex max-w-md flex-1  flex-col justify-center space-y-5">
               <div className="flex flex-col space-y-2 text-center">
                 <h2 className="text-3xl font-bold md:text-4xl">
-                  Sign in to account
+                  Sign up to Family Atlas
                 </h2>
-                <p className="text-md md:text-xl">
-                  Sign up or log in to start tracking your time
-                </p>
+                <p className="text-md md:text-xl">Sign up in to our website</p>
               </div>
               <div className="flex max-w-md flex-col space-y-5">
                 <RegistrationForm />
