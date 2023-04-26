@@ -1,6 +1,12 @@
 import Cookie from "js-cookie";
 
-const CookieNames = ["user", "accessToken", "refreshToken", "activeUserID"];
+const CookieNames = [
+  "user",
+  "accessToken",
+  "access_token",
+  "refreshToken",
+  "activeUserID",
+];
 
 const RemoveCookie = (cookieName, value) => {
   try {

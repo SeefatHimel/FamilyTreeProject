@@ -1,9 +1,8 @@
-import React from "react";
-import { Button, Form, Input } from "antd";
-import { useState } from "react";
-import { toast } from "react-toastify";
+import { Form, Input, message } from "antd";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CheckEmailValidity, RegisterUser } from "../../../APIs/register";
+
+import { CheckEmailValidity, RegisterUser } from "../../../../APIs/register";
 
 const RegistrationForm: React.FC = () => {
   const navigate = useNavigate();
@@ -30,9 +29,7 @@ const RegistrationForm: React.FC = () => {
       const userRegistered = await RegisterUser(temp);
       if (userRegistered) navigate("/login");
     } else {
-      toast.error("email already Used", {
-        containerId: "top-right",
-      });
+      message.error("email already Used");
     }
   };
 
@@ -40,17 +37,16 @@ const RegistrationForm: React.FC = () => {
     console.log("Failed:", errorInfo);
     errorInfo &&
       errorInfo.errorFields.forEach((ef: any) => {
-        toast.error(ef.errors[0], {
-          containerId: "top-right",
-        });
+        message.error(ef.errors[0]);
       });
   };
 
   return (
     <Form
       name="basic"
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
+      // labelCol={{ span: 8 }}
+      // wrapperCol={{ span: 16 }}
+      className="w-[350px] mx-auto"
       initialValues={{ remember: true }}
       onFinish={onFinish}
       onValuesChange={(e) => setEmailStatus("validating")}
@@ -58,22 +54,30 @@ const RegistrationForm: React.FC = () => {
       autoComplete="off"
     >
       <Form.Item
-        label="First Name"
+        // label="First Name"
         name="firstName"
         rules={[{ required: true, message: "Please input your First Name!" }]}
       >
-        <Input />
+        <Input
+          type="text"
+          placeholder="Please input your First Name!"
+          className="flex w-full rounded-lg border-2 border-black px-3 py-2 font-medium placeholder:font-normal md:px-4 md:py-3"
+        />
       </Form.Item>
       <Form.Item
-        label="Last Name"
+        // label="Last Name"
         name="lastName"
         rules={[{ required: true, message: "Please input your Last Name!" }]}
       >
-        <Input />
+        <Input
+          type="text"
+          placeholder="Please input your Last Name!"
+          className="flex w-full rounded-lg border-2 border-black px-3 py-2 font-medium placeholder:font-normal md:px-4 md:py-3"
+        />
       </Form.Item>
 
       <Form.Item
-        label="Email"
+        // label="Email"
         name="email"
         validateFirst={true}
         validateStatus={emailStatus}
@@ -107,22 +111,25 @@ const RegistrationForm: React.FC = () => {
         // help="Something breaks the rule."
       >
         <Input
-          placeholder="I'm the content is being validated"
-          type="email"
-          id="validating"
+          type="text"
+          placeholder="Email"
+          className="flex w-full rounded-lg border-2 border-black px-3 py-2 font-medium placeholder:font-normal md:px-4 md:py-3"
         />
       </Form.Item>
 
       <Form.Item
-        label="Password"
+        // label="Password"
         name="password"
         rules={[{ required: true, message: "Please input your password!" }]}
       >
-        <Input.Password />
+        <Input.Password
+          placeholder="Password"
+          className="flex rounded-lg border-2 border-black px-3 py-2 font-medium placeholder:font-normal md:px-4 md:py-3"
+        />
       </Form.Item>
 
       <Form.Item
-        label="Re-type Password"
+        // label="Re-type Password"
         name="passwordRe"
         rules={[
           { required: true, message: "Please re-input your password!" },
@@ -136,13 +143,16 @@ const RegistrationForm: React.FC = () => {
           }),
         ]}
       >
-        <Input.Password />
+        <Input.Password
+          placeholder="Re-type Password"
+          className="flex rounded-lg border-2 border-black px-3 py-2 font-medium placeholder:font-normal md:px-4 md:py-3"
+        />
       </Form.Item>
 
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit" className="bg-red-500">
-          Submit
-        </Button>
+      <Form.Item>
+        <button className="flex w-full flex-none items-center justify-center rounded-lg border-2 border-black bg-black px-3 py-2 font-medium text-white md:px-4 md:py-3">
+          Sign Up
+        </button>
       </Form.Item>
     </Form>
   );

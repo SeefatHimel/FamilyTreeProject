@@ -1,6 +1,6 @@
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
-import HomePage from "../pages";
+
 import ImageShow from "./imageUpload/imgShow";
 
 const Home = () => {
@@ -14,10 +14,7 @@ const Home = () => {
           You have successfully logged in to our server.
         </div>
       </div>
-      <div className="mx-auto text-center pt-12">
-        <HomePage />
-        This is Home Page
-      </div>
+      <div className="mx-auto text-center pt-12">This is Home Page</div>
       <div className="w-full py-4 text-center">
         <Button className="m-auto" onClick={() => navigate("/FamilyTree/List")}>
           View Family Tree

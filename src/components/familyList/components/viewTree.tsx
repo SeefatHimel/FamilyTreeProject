@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import ChildParentConnectLines from "./connectingLines";
 import AddMemberModal from "../../modal/addMemberModal";
-import { Button } from "antd";
+import { Button, Image } from "antd";
 import GetCookie from "../../../hooks/getCookie";
 import { GetFamilyDetails } from "../../../APIs/familyApis";
 import { setMembers } from "../../../hooks/reducers/membersReducer";
@@ -100,6 +100,10 @@ const ViewTree = () => {
             </div>
           </div>
         )}
+        <Image
+          src="https://drive.google.com/file/d/1nMKsCtrmpmbNOvllw9AA6NHR83Z_RTPc/view"
+          alt="Failed"
+        />
       </>
     );
   };
