@@ -21,6 +21,8 @@ const Home = () => {
         </Button>
       </div>
       <ImageShow />
+      <div className="p-10">
+      </div>
     </div>
   );
 };

@@ -9,6 +9,7 @@ import NavBar from "../components/nav/navbar";
 import { publicRoutes } from "../data/constants";
 import GetCookie from "../hooks/getCookie";
 import { SaveUserInfo } from "../services/saveUserInfo";
+import SideMenu from "../components/nav/sideMenu";
 
 const CustomLayout = ({ children }: any) => {
   const dispatch = useDispatch();
@@ -67,14 +68,25 @@ const CustomLayout = ({ children }: any) => {
   //   if (path !== window.location.pathname) path = window.location.pathname;
   // }, [path]);
   return (
-    <div className="flex flex-col mx-2 h-screen">
-      <Spin spinning={!userDetails && !publicRoutes.includes(path)}>
-        {userDetails && <NavBar />}
-        {/* {!publicRoutes.includes(path) && <InitialLoading />} */}
-        {(userDetails || publicRoutes.includes(path)) && (
-          <div className="">{children}</div>
-        )}
-      </Spin>
+    <div
+      className=""
+      style={{
+        maxWidth: "calc(100vw - 15px)",
+      }}
+    >
+      <div className="h-screen">
+        <Spin spinning={!userDetails && !publicRoutes.includes(path)}>
+          <div className={`${userDetails ? "flex" : ""}`}>
+            {userDetails && <SideMenu />}
+            <div className="w-[90%]">
+              {userDetails && <NavBar />}
+              {(userDetails || publicRoutes.includes(path)) && (
+                <div className="overflow-x-auto">{children}</div>
+              )}
+            </div>
+          </div>
+        </Spin>
+      </div>
     </div>
   );
 };
