@@ -1,8 +1,10 @@
 import { Button, Form, Image, Input, Modal, Select, Switch } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import { AddFamilyMember, AddOriginFamilyMember } from "../../APIs/familyApis";
 import { handleCheckValidity } from "../../services/checkImageLinkValidity";
-import { GetFormData, resizeImage } from "../imageUpload/actions";
+import { ImgbbUploader } from "../imgbb";
+
 const { Option } = Select;
 
 type Props = {
@@ -32,13 +34,13 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
 
   const onFinish = async (values: any) => {
     if (member) {
-      const response = await AddFamilyMember(values, file, memId);
+      const response = await AddFamilyMember(values, memId);
       console.log("🚀 ~ file: modal.tsx:25 ~ onFinish ~ response", response);
     } else {
-      const response = await AddOriginFamilyMember(values, file, memId);
+      const response = await AddOriginFamilyMember(values, memId);
       console.log("🚀 ~ file: modal.tsx:25 ~ onFinish ~ response", response);
     }
-    console.log(values, file);
+    console.log(values);
     setIsModalOpen(false);
   };
   const onFinishFailed = (errorInfo: any) => {
@@ -49,15 +51,24 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
   };
   const onChangeSwitch = (checked: boolean) => {
     setImageType(checked ? "file" : "link");
-    setImgLink("");
-    setImageSrc("");
-    setFile(null);
-    console.log(`switch to ${checked ? "file" : "link"}`);
+    // setImgLink("");
+    // setImageSrc("");
+    // setFile(null);
+    // console.log(`switch to ${checked ? "file" : "link"}`);
+  };
+
+  const handleFileUpload = async (link: string) => {
+    setImgLink(link);
+    setImageType("link");
+    const resp = await handleCheckValidity(link);
+    if (resp) {
+      !validImage && setValidImage(!validImage);
+    } else validImage && setValidImage(!validImage);
   };
 
   const validateLink = async (rule: any, value: any) => {
-    const resp = await handleCheckValidity(value);
-    if (!value || value === "") {
+    const resp = await handleCheckValidity(imgLink);
+    if (!imgLink || imgLink === "") {
       return Promise.reject("You must enter a image");
     } else if (!resp) {
       return Promise.reject("Please enter a valid image Link");
@@ -65,22 +76,27 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
       return Promise.resolve();
     }
   };
-  const [imageSrc, setImageSrc] = useState("");
-  const [file, setFile] = useState<any>(null);
   // console.log("🚀 ~ file: index.tsx:7 ~ UploadForm ~ file", file);
 
-  const handleFileChange = async (event: any) => {
-    const resizedImage = await resizeImage(event.target.files[0], 800, 800);
-    console.log(
-      "🚀 ~ file: addMemberModal.tsx:70 ~ handleFileChange ~ resizedImage:",
-      resizedImage
-    );
-    setFile(resizedImage);
-    setImageSrc(URL.createObjectURL(resizedImage));
-  };
+  // const handleFileChange = async (event: any) => {
+  //   const resizedImage = await resizeImage(event.target.files[0], 800, 800);
+  //   console.log(
+  //     "🚀 ~ file: addMemberModal.tsx:70 ~ handleFileChange ~ resizedImage:",
+  //     resizedImage
+  //   );
+  //   setFile(resizedImage);
+  //   setImageSrc(URL.createObjectURL(resizedImage));
+  // };
 
   const [imgLink, setImgLink] = useState<string>("");
+  console.log("🚀 ~ file: addMemberModal.tsx:85 ~ imgLink:", imgLink);
 
+  useEffect(() => {
+    form.setFieldsValue({
+      imgLink: imgLink,
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imgLink]);
   return (
     <>
       <Modal
@@ -104,6 +120,7 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
           <Switch
             checkedChildren={<>File</>}
             unCheckedChildren={<>Link</>}
+            checked={imageType === "file"}
             defaultChecked
             className="bg-green-600 hover:bg-green-400 absolute right-8"
             onChange={onChangeSwitch}
@@ -120,11 +137,11 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
                 />
               </div>
               <Form.Item
-                // validateStatus={validImage ? "success" : "error"}
+                validateStatus={validImage ? "success" : "error"}
                 hasFeedback
                 name="imgLink"
                 label="Image"
-                validateFirst
+                // validateFirst
                 rules={[
                   // { required: true },
                   {
@@ -140,6 +157,7 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
               >
                 <Input
                   className="flex items-center justify-center text-center"
+                  value={imgLink}
                   onChange={async (e) => {
                     setImgLink(e.target.value);
                     const resp = await handleCheckValidity(e.target.value);
@@ -160,18 +178,23 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
               <div className="h-[100px] w-fit mx-auto mb-3 rounded-full border-2 border-red-600  flex items-center justify-center overflow-hidden">
                 <Image
                   width={100}
-                  src={`${imageSrc}`}
+                  src={`${imgLink}`}
                   alt="Invalid Image"
                   preview={{ mask: false }}
                   fallback="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrqaGgivHe2_fIOSNQcC0aqIvkG2zUrR0qEQ&usqp=CAU"
                 />
               </div>
-              <Input
+              <ImgbbUploader
+                handleFileUpload={handleFileUpload}
+                apiKey={"011b0db5cc767987436b6039bde8033e"}
+                apiUrl={"https://api.imgbb.com/1/upload"}
+              />
+              {/* <Input
                 type="file"
                 required
                 className="flex justify-center pl-24"
                 onChange={handleFileChange}
-              />
+              /> */}
             </div>
           )}
           {member && (

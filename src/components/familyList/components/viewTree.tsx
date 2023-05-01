@@ -43,7 +43,7 @@ const ViewTree = () => {
     return (
       <>
         {member && (
-          <div className="flex m-1  overflow-visible">
+          <div className="flex m-1">
             <div className="m-2 p-0.5 rounded-lg h-min relative">
               <div className="flex h-min mx-auto w-min pb-2 relative">
                 {/* T er down ta */}
@@ -100,10 +100,6 @@ const ViewTree = () => {
             </div>
           </div>
         )}
-        <Image
-          src="https://drive.google.com/file/d/1nMKsCtrmpmbNOvllw9AA6NHR83Z_RTPc/view"
-          alt="Failed"
-        />
       </>
     );
   };
@@ -139,7 +135,7 @@ const ViewTree = () => {
           <GenComponent member={member} />
         ))} */}
         {familyDetails.members.length > 0 && origin ? (
-          <div className="mx-auto w-min">
+          <div className="mx-auto w-[98%] overflow-auto">
             {BuildTree(getMember(origin), 0, 0)}
           </div>
         ) : (
