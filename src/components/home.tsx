@@ -1,8 +1,6 @@
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 
-import ImageShow from "./imageUpload/imgShow";
-
 const Home = () => {
   const navigate = useNavigate();
 
@@ -16,12 +14,12 @@ const Home = () => {
       </div>
       <div className="mx-auto text-center pt-12">This is Home Page</div>
       <div className="w-full py-4 text-center">
-        <Button className="m-auto" onClick={() => navigate("/FamilyTree/List")}>
+        <Button
+          className="m-auto"
+          onClick={() => navigate("/FamilyTree/Enter")}
+        >
           View Family Tree
         </Button>
-      </div>
-      <ImageShow />
-      <div className="p-10">
       </div>
     </div>
   );

@@ -11,7 +11,6 @@ const localHost = process.env.NODE_ENV === "development" ? true : false;
 const apiEndpoint = localHost
   ? process.env.REACT_APP_API_URL_LOCAL
   : process.env.REACT_APP_API_URL;
-console.log("🚀 ~ file: index.ts:12 ~ process.env", process.env);
 
 export async function GetFamilyDetails(familyId: any) {
   console.log(
@@ -24,7 +23,6 @@ export async function GetFamilyDetails(familyId: any) {
       // familyId
       { params: { familyId: familyId }, withCredentials: true }
     );
-    console.log("🚀 ~ file: familyApis.ts:18 ~ GetFamilyDetails ~ data", data);
     if (data?.id) SetCookie("activeFamilyID", data.id);
     toast.success(data?.message, {
       containerId: "top-right",
@@ -47,7 +45,7 @@ export async function GetFamily(values: any) {
     toast.success(data?.message, {
       containerId: "top-right",
     });
-    return data?.details;
+    return data;
   } catch (error: any) {
     const { data } = error.response;
 
