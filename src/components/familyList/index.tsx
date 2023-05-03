@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { getLocalStorage } from "../../storage/storage";
+
 import { GetFamilyDetails } from "../../APIs/familyApis";
+import { getLocalStorage } from "../../storage/storage";
 
 const FamilyList = () => {
   const [families, setFamilies] = useState<any>([]);
@@ -22,7 +23,7 @@ const FamilyList = () => {
   };
   useEffect(() => {
     getFamilies();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {}, [families]);
 

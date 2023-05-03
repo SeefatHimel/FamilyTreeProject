@@ -10,7 +10,7 @@ import Login from "./components/auth/login";
 import Registration from "./components/auth/registration";
 import FamilyList from "./components/familyList";
 import FamilyListForm from "./components/familyList/components/familyListForm";
-import ViewTree from "./components/familyList/components/viewTree";
+import ViewTree from "./components/viewFamilyTree";
 import Home from "./components/home";
 import CustomLayout from "./layout";
 import SocialLoginCallback from "./pages/socialLoginCallBack";
