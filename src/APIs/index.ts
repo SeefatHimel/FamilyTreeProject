@@ -91,9 +91,7 @@ export async function GetData() {
     const accessToken = GetCookie("accessToken");
     console.log(accessToken);
 
-    const response = await axios.get(apiEndpoint + "getData", {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
+    const response = await axios.get(apiEndpoint + "getData");
     console.log("data ", response.data);
     return response.data;
   } catch (error: any) {
