@@ -1,6 +1,5 @@
 import React from "react";
-import { Button, Checkbox, Form, Input } from "antd";
-import { toast } from "react-toastify";
+import { Checkbox, Form, Input, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { SaveUserInfo } from "../../../../services/saveUserInfo";
@@ -18,9 +17,7 @@ const LoginForm: React.FC = () => {
         ? console.log("saved user info")
         : console.log(" failed to save user info");
 
-      toast.success(data?.message, {
-        containerId: "top-right",
-      });
+      message.success(data?.message);
       navigate("/");
     }
   };

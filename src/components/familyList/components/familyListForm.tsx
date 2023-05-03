@@ -1,7 +1,6 @@
 import { Button, Checkbox, Form, Input } from "antd";
 import React from "react";
 import { useDispatch } from "react-redux";
-// import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 import { GetFamily } from "../../../APIs/familyApis";
@@ -40,9 +39,7 @@ const FamilyListForm: React.FC = () => {
       //   ? console.log("saved user info")
       //   : console.log(" failed to save user info");
 
-      // toast.success(data?.message, {
-      //   containerId: "top-right",
-      // });
+      // message.success(data?.message);
 
       // const params = {
       //   color: "blue",

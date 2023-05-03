@@ -1,6 +1,6 @@
-import { Button, Form, Image, Input, Modal, Switch } from "antd";
+import { Button, Form, Image, Input, Modal, Switch, message } from "antd";
 import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
+
 import { UpdateFamilyMember } from "../../APIs/familyApis";
 import { handleCheckValidity } from "../../services/checkImageLinkValidity";
 import { ImgbbUploader } from "../imgbb";
@@ -47,7 +47,7 @@ const EditMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
     console.log(updated);
     // window.location.reload();
     if (updated) setIsModalOpen(false);
-    toast.error("Please input a Valid Image Link");
+    message.error("Please input a Valid Image Link");
   };
 
   const onReset = () => {
@@ -89,7 +89,7 @@ const EditMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
     form.setFieldsValue({
       imgLink: imgLink,
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imgLink]);
   return (
     <>

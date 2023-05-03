@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import { message } from "antd";
 
 export const handleCheckValidity = async (imageLink: string) => {
   function isImageURL(url: string) {
@@ -17,7 +17,7 @@ export const handleCheckValidity = async (imageLink: string) => {
     })
     .catch(() => {
       console.log("Invalid image URL");
-      toast.error("Invalid image URL");
+      message.error("Invalid image URL");
       valid = false;
     });
   return valid;
