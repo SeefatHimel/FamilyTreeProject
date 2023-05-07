@@ -1,35 +1,35 @@
+import { FiList } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+
 import {
   ApartmentOutlined,
   HomeOutlined,
   UsergroupAddOutlined,
 } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
 
 const SideMenu = () => {
   const navigate = useNavigate();
   const SideMenuOption = ({ option, active }: any) => {
     return (
       <div
-        className={`group flex items-center gap-2 rounded-lg py-[10px] px-1 pl-[10px] hover:cursor-pointer hover:bg-[#ECECED] hover:text-black ${
-          active ? "bg-[#ECECED] text-black" : ""
+        className={`flex items-center gap-2 rounded-lg py-[10px] px-1 pl-[10px] 
+        hover:cursor-pointer 
+        hover:stroke-black 
+        hover:bg-[#ECECED] 
+        hover:text-black ${
+          active
+            ? "bg-[#ECECED] stroke-black text-black"
+            : "stroke-[#ADACB0] text-[#ADACB0]"
         }`}
         onClick={() => {
           navigate(option.link);
         }}
       >
-        <div
-          className={` group-hover:stroke-black group-hover:text-black ${
-            active ? "stroke-black " : "stroke-[#ADACB0] text-[#ADACB0]"
-          }`}
-        >
-          {option.icon}
-        </div>
-        <div
-          className={`text-sm ${
-            active ? "font-semibold text-black" : "font-medium text-[#4D4E55]"
-          }`}
-        >
-          {option.title}
+        <div className={""}>
+          <div className="flex items-center gap-4">
+            {option.icon}
+            {option.title}
+          </div>
         </div>
       </div>
     );
@@ -56,7 +56,7 @@ const SideMenu = () => {
                 <SideMenuOption
                   key={Math.random()}
                   option={option}
-                  // active={router.asPath.includes(option.link)}
+                  active={window.location.pathname.includes(option.link)}
                 />
               ))}
             </div>
@@ -70,6 +70,7 @@ const SideMenu = () => {
 export default SideMenu;
 
 export const sideMenuOptions = [
-  { link: "/", title: "Home", icon: <HomeOutlined /> },
-  { link: "/FamilyTree/List", title: "Enter", icon: <UsergroupAddOutlined /> },
+  { link: "/home", title: "Home", icon: <HomeOutlined /> },
+  { link: "/FamilyTree/List", title: "List", icon: <FiList /> },
+  { link: "/FamilyTree/Enter", title: "Enter", icon: <UsergroupAddOutlined /> },
 ];

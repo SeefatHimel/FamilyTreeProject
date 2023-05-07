@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { UploadImage } from "../../APIs/familyApis";
-import { toast } from "react-toastify";
+
 import { resizeImage } from "./actions";
+import { message } from "antd";
 
 const UploadForm = () => {
   const [file, setFile] = useState<any>(null);
@@ -28,7 +29,7 @@ const UploadForm = () => {
         formData
       );
       UploadImage(formData);
-    } else toast.error("No file");
+    } else message.error("No file");
   };
 
   return (

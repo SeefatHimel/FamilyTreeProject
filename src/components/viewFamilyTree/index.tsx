@@ -1,19 +1,20 @@
-import GenComponent from "../../genes/genComponent";
-import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
-import ChildParentConnectLines from "./connectingLines";
-import AddMemberModal from "../../modal/addMemberModal";
-import { Button, Image } from "antd";
-import GetCookie from "../../../hooks/getCookie";
-import { GetFamilyDetails } from "../../../APIs/familyApis";
-import { setMembers } from "../../../hooks/reducers/membersReducer";
-import SpouseConnectorLine from "./spouseConnector";
-import React from "react";
+import { Button } from "antd";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { GetFamilyDetails } from "../../APIs/familyApis";
+import GetCookie from "../../hooks/getCookie";
+import { setMembers } from "../../hooks/reducers/membersReducer";
+import GenComponent from "../genes/genComponent";
+import AddMemberModal from "../modal/addMemberModal";
+import ChildParentConnectLines from "./components/connectingLines";
+import SpouseConnectorLine from "./components/spouseConnector";
 
 const ViewTree = () => {
   const dispatch = useDispatch();
   const [reload, setReload] = useState<boolean>(false);
-  const realoadData = () => setReload(!reload);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const reloadData = () => setReload(!reload);
   const familyDetails = useSelector(
     (state: any) => state?.members?.MembersList
   );

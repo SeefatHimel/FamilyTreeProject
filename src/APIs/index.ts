@@ -1,6 +1,5 @@
 import { message } from "antd";
 import axios from "axios";
-import { toast } from "react-toastify";
 
 import GetCookie from "../hooks/getCookie";
 import { RemoveAllCookies } from "../hooks/removeCookie";
@@ -11,7 +10,6 @@ const localHost = process.env.NODE_ENV === "development" ? true : false;
 const apiEndpoint = localHost
   ? process.env.REACT_APP_API_URL_LOCAL
   : process.env.REACT_APP_API_URL;
-console.log("🚀 ~ file: index.ts:12 ~ process.env", process.env);
 
 export async function getAuthLink() {
   try {
@@ -21,9 +19,7 @@ export async function getAuthLink() {
   } catch (error: any) {
     console.log(error);
     error?.response?.data?.message &&
-      toast.error(error?.response?.data?.message, {
-        containerId: "top-right",
-      });
+      message.error(error?.response?.data?.message);
   }
 }
 
@@ -72,16 +68,12 @@ export async function GetJwtTokens(code: string) {
 
     console.log("GetJwtTokens >> api >> ", response.data);
     if (response?.data) {
-      toast.success(response?.data?.message, {
-        containerId: "top-right",
-      });
+      message.success(response?.data?.message);
     }
     return response.data;
   } catch (error: any) {
     console.error("Login Error", error);
-    toast.error(error?.response?.data?.message, {
-      containerId: "top-right",
-    });
+    message.error(error?.response?.data?.message);
     RemoveAllCookies();
     return false;
   }
@@ -92,9 +84,7 @@ export async function GetData() {
     const accessToken = GetCookie("accessToken");
     console.log(accessToken);
 
-    const response = await axios.get(apiEndpoint + "getData", {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
+    const response = await axios.get(apiEndpoint + "getData");
     console.log("data ", response.data);
     return response.data;
   } catch (error: any) {
@@ -104,15 +94,11 @@ export async function GetData() {
       const GotJwtAccessToken = await GetJwtAccessToken();
       GotJwtAccessToken
         ? await GetData()
-        : toast.error(error?.response?.data?.message, {
-            containerId: "top-right",
-          });
+        : message.error(error?.response?.data?.message);
       console.log("GotJwtAccessToken", GotJwtAccessToken);
       if (!GotJwtAccessToken) return -1;
     } else {
-      toast.error(error?.response?.data?.message, {
-        containerId: "top-right",
-      });
+      message.error(error?.response?.data?.message);
     }
     console.error(error?.response?.status);
   }

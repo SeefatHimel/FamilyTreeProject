@@ -1,4 +1,5 @@
 import { Spin } from "antd";
+import Axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -6,15 +7,45 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { GetJwtTokens } from "../APIs";
 import InitialLoading from "../components/InitialLoading";
 import NavBar from "../components/nav/navbar";
+import SideMenu from "../components/nav/sideMenu";
 import { publicRoutes } from "../data/constants";
 import GetCookie from "../hooks/getCookie";
 import { SaveUserInfo } from "../services/saveUserInfo";
-import SideMenu from "../components/nav/sideMenu";
+
+Axios.interceptors.request.use(
+  (config) => {
+    const token = GetCookie("accessToken");
+    if (!config.headers) config.headers = {};
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Axios.interceptors.response.use(undefined, async (error) => {
+//   const { status, data } = error.response;
+//   console.log(
+//     "🚀 ~ file: _app.tsx:38 ~ axios.interceptors.response.use ~ error:",
+//     error.config.url
+//   );
+//   if (!error.response) {
+//     message.error("Backend Crashed");
+//   }
+//   if (data?.error?.message)
+//     message.error(
+//       data?.error?.message ? data?.error?.message : "Something Went Wrong"
+//     );
+
+//   throw error.response;
+// });
 
 const CustomLayout = ({ children }: any) => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const accessToken = GetCookie("accessToken");
   const userDetails = useSelector((state: any) => state.user.userDetails);
   console.log(
     "🚀 ~ file: index.tsx:11 ~ CustomLayout ~ userDetails:",
@@ -60,6 +91,16 @@ const CustomLayout = ({ children }: any) => {
       console.log("🚀 ~ file: index.tsx:52 ~ checkLogin ~ res", res);
     }
   };
+
+  const routeGuard = () => {
+    const token = GetCookie("accessToken");
+    if (!publicRoutes.includes(path) && !token) {
+      navigate("/login");
+    }
+  };
+  useEffect(() => {
+    routeGuard();
+  });
   useEffect(() => {
     checkLogin();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,12 +116,14 @@ const CustomLayout = ({ children }: any) => {
       }}
     >
       <div className="h-screen">
-        <Spin spinning={!userDetails && !publicRoutes.includes(path)}>
-          <div className={`${userDetails ? "flex" : ""}`}>
-            {userDetails && <SideMenu />}
+        <Spin
+          spinning={!GetCookie("accessToken") && !publicRoutes.includes(path)}
+        >
+          <div className={`${accessToken ? "flex" : ""}`}>
+            {accessToken && <SideMenu />}
             <div className="w-[90%]">
-              {userDetails && <NavBar />}
-              {(userDetails || publicRoutes.includes(path)) && (
+              {accessToken && <NavBar />}
+              {(accessToken || publicRoutes.includes(path)) && (
                 <div className="overflow-x-auto">{children}</div>
               )}
             </div>

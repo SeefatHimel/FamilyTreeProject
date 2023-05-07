@@ -1,5 +1,5 @@
+import { message } from "antd";
 import axios from "axios";
-import { toast } from "react-toastify";
 const localHost = process.env.NODE_ENV === "development" ? true : false;
 console.log(
   "🚀 ~ file: register.ts:4 ~ process.env.MODE",
@@ -18,15 +18,11 @@ export async function RegisterUser(data: any) {
       data,
     });
     console.log(response);
-    toast.success("User Added", {
-      containerId: "top-right",
-    });
+    message.success("User Added");
     return true;
   } catch (error: any) {
     console.log(error);
-    toast.error(error?.response?.data?.message, {
-      containerId: "top-right",
-    });
+    message.error(error?.response?.data?.message);
     return false;
   }
 }
@@ -55,8 +51,6 @@ export async function SignIn(values: any) {
   } catch (error: any) {
     const { data } = error.response;
 
-    toast.error(data?.message, {
-      containerId: "top-right",
-    });
+    message.error(data?.message);
   }
 }

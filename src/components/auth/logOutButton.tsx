@@ -5,6 +5,7 @@ import { LogoutOutlined } from "@ant-design/icons";
 
 import { LogOut } from "../../APIs";
 import { resetUser } from "../../hooks/reducers/userReducer";
+import { message } from "antd";
 
 const LogOutButton = () => {
   const navigate = useNavigate();
@@ -15,6 +16,8 @@ const LogOutButton = () => {
     if (await LogOut()) {
       dispatch(resetUser());
       navigate("/login");
+    } else {
+      message.error("Failed to Logout");
     }
   };
   return (
