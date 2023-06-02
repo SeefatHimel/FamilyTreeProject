@@ -11,7 +11,7 @@ import Registration from "./components/auth/registration";
 import FamilyList from "./components/familyList";
 import FamilyListForm from "./components/familyList/components/familyListForm";
 import ViewTree from "./components/viewFamilyTree";
-import Home from "./components/home";
+import Home from "./components/homePage";
 import CustomLayout from "./layout";
 import SocialLoginCallback from "./pages/socialLoginCallBack";
 import { store } from "./storage/store";

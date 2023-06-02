@@ -1,5 +1,5 @@
 import { Spin } from "antd";
-import Axios from "axios";
+import Axios, { AxiosRequestHeaders } from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -15,7 +15,7 @@ import { SaveUserInfo } from "../services/saveUserInfo";
 Axios.interceptors.request.use(
   (config) => {
     const token = GetCookie("accessToken");
-    if (!config.headers) config.headers = {};
+    if (!config.headers) config.headers = {} as AxiosRequestHeaders;
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
