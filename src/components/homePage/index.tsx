@@ -5,7 +5,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="p-6 w-full h-max bg-slate-400">
+    <div className="p-6 w-full h-full bg-slate-400">
       <div className="w-full h-max">
         <div className="text-center text-3xl font-extrabold">Welcome</div>
         <div className="text-center text-lg font-bold w-1/2 mx-auto">

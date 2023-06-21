@@ -121,10 +121,10 @@ const CustomLayout = ({ children }: any) => {
         >
           <div className={`${accessToken ? "flex" : ""}`}>
             {accessToken && <SideMenu />}
-            <div className="w-[90%]">
+            <div className="w-[90%] flex flex-col">
               {accessToken && <NavBar />}
               {(accessToken || publicRoutes.includes(path)) && (
-                <div className="overflow-x-auto">{children}</div>
+                <div className="overflow-x-auto h-full">{children}</div>
               )}
             </div>
           </div>
