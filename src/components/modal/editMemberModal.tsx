@@ -44,10 +44,9 @@ const EditMemberModal = ({ isModalOpen, setIsModalOpen, member }: any) => {
     );
     console.log("🚀 ~ file: editMemberModal.tsx:27 ~ onFinish ~ tmp", tmp);
     const updated = await UpdateFamilyMember(tmp);
-    console.log(updated);
     // window.location.reload();
     if (updated) setIsModalOpen(false);
-    message.error("Please input a Valid Image Link");
+    else message.error("failed to update");
   };
 
   const onReset = () => {

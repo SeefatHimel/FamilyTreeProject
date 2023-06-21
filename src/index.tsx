@@ -15,10 +15,46 @@ import Home from "./components/homePage";
 import CustomLayout from "./layout";
 import SocialLoginCallback from "./pages/socialLoginCallBack";
 import { store } from "./storage/store";
+import Axios from "axios";
+import GetCookie from "./hooks/getCookie";
+import { message } from "antd";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
+// const apiEndpoint = "https://login-backend-himel.onrender.com/";
+const localHost = process.env.NODE_ENV === "development" ? true : false;
+const baseUrl = localHost
+  ? process.env.REACT_APP_API_URL_LOCAL
+  : process.env.REACT_APP_API_URL;
+
+Axios.defaults.baseURL = baseUrl;
+Axios.interceptors.request.use(
+  (config) => {
+    const token = GetCookie("accessToken");
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+Axios.interceptors.response.use(undefined, async (error) => {
+  const { status, data } = error.response;
+  if (!error.response) {
+    message.error("Backend Crashed");
+  }
+  if (data?.error?.message)
+    message.error(
+      data?.error?.message ? data?.error?.message : "Something Went Wrong"
+    );
+  // if (status === 401) userAPI.logout();
+
+  throw error.response;
+});
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>

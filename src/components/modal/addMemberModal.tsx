@@ -71,7 +71,7 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
     if (!imgLink || imgLink === "") {
       return Promise.reject("You must enter a image");
     } else if (!resp) {
-      return Promise.reject("Please enter a valid image Link");
+      return Promise.reject("Please enter a valid image Link (add)");
     } else {
       return Promise.resolve();
     }
@@ -95,7 +95,7 @@ const AddMemberModal = ({ isModalOpen, setIsModalOpen, member }: Props) => {
     form.setFieldsValue({
       imgLink: imgLink,
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imgLink]);
   return (
     <>

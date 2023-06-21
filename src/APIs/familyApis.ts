@@ -4,13 +4,6 @@ import axios from "axios";
 import GetCookie from "../hooks/getCookie";
 import SetCookie from "../hooks/setCookie";
 
-// const apiEndpoint = "https://login-backend-himel.onrender.com/";
-const localHost = process.env.NODE_ENV === "development" ? true : false;
-// const apiEndpoint2 = "https://familytreebackenddev.onrender.com/";
-const apiEndpoint = localHost
-  ? process.env.REACT_APP_API_URL_LOCAL
-  : process.env.REACT_APP_API_URL;
-
 export async function GetFamilyDetails(familyId: any) {
   console.log(
     "🚀 ~ file: familyApis.ts:15 ~ GetFamilyDetails ~ familyId",
@@ -18,7 +11,7 @@ export async function GetFamilyDetails(familyId: any) {
   );
   try {
     const { data } = await axios.get(
-      apiEndpoint + "familyTree/getDetails",
+      "familyTree/getDetails",
       // familyId
       { params: { familyId: familyId }, withCredentials: true }
     );
@@ -34,7 +27,7 @@ export async function GetFamilyDetails(familyId: any) {
 export async function GetFamily(values: any) {
   console.log("🚀 ~ file: familyApis.ts:15 ~ GetFamily ~ values", values);
   try {
-    const { data } = await axios.post(apiEndpoint + "familyTree/enter", values);
+    const { data } = await axios.post("familyTree/enter", values);
     console.log("🚀 ~ file: familyApis.ts:18 ~ GetFamily ~ data", data.id);
     if (data?.id) SetCookie("activeFamilyID", data.id);
     message.success(data?.message);
@@ -48,7 +41,7 @@ export async function GetFamily(values: any) {
 
 export async function AddFamilyMember(data: any, memId: string) {
   try {
-    const response = await axios.post(apiEndpoint + "familyTree/add", {
+    const response = await axios.post("familyTree/add", {
       familyId: GetCookie("activeFamilyID"),
       data,
       memId,
@@ -70,7 +63,7 @@ export async function AddFamilyMember(data: any, memId: string) {
 
 export async function AddOriginFamilyMember(data: any, memId: string) {
   try {
-    const response = await axios.post(apiEndpoint + "familyTree/add/origin", {
+    const response = await axios.post("familyTree/add/origin", {
       familyId: GetCookie("activeFamilyID"),
       data,
       memId,
@@ -91,7 +84,7 @@ export async function AddOriginFamilyMember(data: any, memId: string) {
 
 export async function DeleteFamilyMember(memId: string) {
   try {
-    const response = await axios.post(apiEndpoint + "familyTree/delete", {
+    const response = await axios.post("familyTree/delete", {
       familyId: GetCookie("activeFamilyID"),
       memId,
     });
@@ -109,16 +102,20 @@ export async function DeleteFamilyMember(memId: string) {
 
 export async function UpdateFamilyMember(data: any) {
   try {
-    const response = await axios.put(apiEndpoint + "familyTree/update", {
+    const response = await axios.put("familyTree/update", {
       familyId: GetCookie("activeFamilyID"),
       data,
     });
+    console.log(
+      "🚀 ~ file: familyApis.ts:109 ~ UpdateFamilyMember ~ response:",
+      response
+    );
     if (response?.data) {
       message.success(response?.data?.message);
     }
     // window.location.reload();
-    return false;
-    // return true;
+    // return false;
+    return true;
   } catch (error: any) {
     console.log(
       "🚀 ~ file: familyApis.ts:51 ~ UpdateFamilyMember ~ error",
@@ -131,7 +128,7 @@ export async function UpdateFamilyMember(data: any) {
 
 export async function UploadImage(formData: any) {
   try {
-    await axios.post(apiEndpoint + "upload", formData).then((response) => {
+    await axios.post("upload", formData).then((response) => {
       console.log(response.data);
     });
   } catch (error: any) {
@@ -144,7 +141,7 @@ export async function UploadImage(formData: any) {
 
 export async function GetImage() {
   try {
-    const res: any = await axios.get(apiEndpoint + "download");
+    const res: any = await axios.get("download");
     console.log("🚀 ~ file: familyApis.ts:172 ~ GetImage ~ res", res);
     // .then((response) => {
     //   console.log(response.data);

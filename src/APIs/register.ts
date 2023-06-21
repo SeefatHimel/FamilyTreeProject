@@ -14,7 +14,7 @@ const apiEndpoint = localHost
 console.log("🚀 ~ file: register.ts:5 ~ apiEndpoint", apiEndpoint);
 export async function RegisterUser(data: any) {
   try {
-    const response = await axios.post(apiEndpoint + "signUp", {
+    const response = await axios.post("auth/signUp", {
       data,
     });
     console.log(response);
@@ -29,7 +29,7 @@ export async function RegisterUser(data: any) {
 
 export async function CheckEmailValidity(passedEmail: any) {
   try {
-    await axios.post(apiEndpoint + "register_email", {
+    await axios.post("auth/register_email", {
       headers: {},
       data: { email: passedEmail },
       Credential: true,
@@ -43,7 +43,7 @@ export async function CheckEmailValidity(passedEmail: any) {
 
 export async function SignIn(values: any) {
   try {
-    const { data } = await axios.post(apiEndpoint + "signIn", {
+    const { data } = await axios.post("auth/signIn", {
       email: values.email,
       password: values.password,
     });

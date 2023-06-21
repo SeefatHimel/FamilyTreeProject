@@ -5,15 +5,9 @@ import GetCookie from "../hooks/getCookie";
 import { RemoveAllCookies } from "../hooks/removeCookie";
 import SetCookie from "../hooks/setCookie";
 
-// const apiEndpoint = "https://login-backend-himel.onrender.com/";
-const localHost = process.env.NODE_ENV === "development" ? true : false;
-const apiEndpoint = localHost
-  ? process.env.REACT_APP_API_URL_LOCAL
-  : process.env.REACT_APP_API_URL;
-
 export async function getAuthLink() {
   try {
-    const response = await axios.get(apiEndpoint + "getLink");
+    const response = await axios.get("auth/getLink");
     console.log("Auth url ", response);
     return response;
   } catch (error: any) {
@@ -25,7 +19,7 @@ export async function getAuthLink() {
 
 export async function LogOut() {
   try {
-    const { data } = await axios.post(apiEndpoint + "logout");
+    const { data } = await axios.post("auth/logout");
     console.log(data);
     RemoveAllCookies();
     message.success(data.message);
@@ -42,7 +36,7 @@ export async function GetJwtAccessToken() {
     message.error("Response Token not found");
     return false;
   } else {
-    const response = await axios.post(apiEndpoint + "token", {
+    const response = await axios.post("auth/token", {
       token: refreshToken,
     });
     console.log(response);
@@ -59,7 +53,7 @@ export async function GetJwtAccessToken() {
 export async function GetJwtTokens(code: string) {
   console.log("Code :", code);
   try {
-    const response = await axios.get(apiEndpoint + "login", {
+    const response = await axios.get("auth/login", {
       params: { code: code },
       // code: code,
       withCredentials: true,
@@ -84,7 +78,7 @@ export async function GetData() {
     const accessToken = GetCookie("accessToken");
     console.log(accessToken);
 
-    const response = await axios.get(apiEndpoint + "getData");
+    const response = await axios.get("auth/getData");
     console.log("data ", response.data);
     return response.data;
   } catch (error: any) {
