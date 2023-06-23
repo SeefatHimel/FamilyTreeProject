@@ -4,10 +4,11 @@ import axios from "axios";
 import GetCookie from "../hooks/getCookie";
 import { RemoveAllCookies } from "../hooks/removeCookie";
 import SetCookie from "../hooks/setCookie";
+import { apiEndpoints } from "../utils/apiEndpoints";
 
 export async function getAuthLink() {
   try {
-    const response = await axios.get("auth/getLink");
+    const response = await axios.get(apiEndpoints.authLink);
     console.log("Auth url ", response);
     return response;
   } catch (error: any) {
@@ -19,7 +20,7 @@ export async function getAuthLink() {
 
 export async function LogOut() {
   try {
-    const { data } = await axios.post("auth/logout");
+    const { data } = await axios.post(apiEndpoints.logout);
     console.log(data);
     RemoveAllCookies();
     message.success(data.message);
@@ -36,7 +37,7 @@ export async function GetJwtAccessToken() {
     message.error("Response Token not found");
     return false;
   } else {
-    const response = await axios.post("auth/token", {
+    const response = await axios.post(apiEndpoints.token, {
       token: refreshToken,
     });
     console.log(response);
@@ -53,7 +54,7 @@ export async function GetJwtAccessToken() {
 export async function GetJwtTokens(code: string) {
   console.log("Code :", code);
   try {
-    const response = await axios.get("auth/login", {
+    const response = await axios.get(apiEndpoints.login, {
       params: { code: code },
       // code: code,
       withCredentials: true,
@@ -78,7 +79,7 @@ export async function GetData() {
     const accessToken = GetCookie("accessToken");
     console.log(accessToken);
 
-    const response = await axios.get("auth/getData");
+    const response = await axios.get(apiEndpoints.getData);
     console.log("data ", response.data);
     return response.data;
   } catch (error: any) {

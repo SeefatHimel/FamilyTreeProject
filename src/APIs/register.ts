@@ -1,20 +1,10 @@
 import { message } from "antd";
 import axios from "axios";
-const localHost = process.env.NODE_ENV === "development" ? true : false;
-console.log(
-  "🚀 ~ file: register.ts:4 ~ process.env.MODE",
-  localHost,
-  process.env.MODE
-);
+import { apiEndpoints } from "../utils/apiEndpoints";
 
-const apiEndpoint = localHost
-  ? process.env.REACT_APP_API_URL_LOCAL
-  : process.env.REACT_APP_API_URL;
-
-console.log("🚀 ~ file: register.ts:5 ~ apiEndpoint", apiEndpoint);
 export async function RegisterUser(data: any) {
   try {
-    const response = await axios.post("auth/signUp", {
+    const response = await axios.post(apiEndpoints.signUp, {
       data,
     });
     console.log(response);
@@ -29,7 +19,7 @@ export async function RegisterUser(data: any) {
 
 export async function CheckEmailValidity(passedEmail: any) {
   try {
-    await axios.post("auth/register_email", {
+    await axios.post(apiEndpoints.emailValidity, {
       headers: {},
       data: { email: passedEmail },
       Credential: true,
@@ -43,7 +33,7 @@ export async function CheckEmailValidity(passedEmail: any) {
 
 export async function SignIn(values: any) {
   try {
-    const { data } = await axios.post("auth/signIn", {
+    const { data } = await axios.post(apiEndpoints.signIn, {
       email: values.email,
       password: values.password,
     });
