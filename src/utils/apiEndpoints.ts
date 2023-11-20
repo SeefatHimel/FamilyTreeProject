@@ -5,6 +5,7 @@ export const apiEndpoints = {
   deleteFamilyMember: "familyTree/delete",
   familyLogin: "familyTree/enter",
   getFamilyDetails: "familyTree/getDetails",
+  getFamilyList: "familyTree/getFamilyList",
   uploadImage: "upload",
   downloadImage: "download",
   authLink: "auth/getLink",

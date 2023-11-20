@@ -11,16 +11,18 @@ export async function GetFamilyDetails(familyId: any) {
     familyId
   );
   try {
-    const { data } = await axios.get(
-      apiEndpoints.getFamilyDetails,
-      // familyId
-      { params: { familyId: familyId }, withCredentials: true }
-    );
+    const data = (
+      await axios.get(
+        apiEndpoints.getFamilyDetails,
+        // familyId
+        { params: { familyId: familyId }, withCredentials: true }
+      )
+    )?.data;
     if (data?.id) SetCookie("activeFamilyID", data.id);
     message.success(data?.message);
     return data?.details;
   } catch (error: any) {
-    const { data } = error.response;
+    const data = error.response?.data;
 
     message.error(data?.message);
   }
@@ -28,15 +30,22 @@ export async function GetFamilyDetails(familyId: any) {
 export async function GetFamily(values: any) {
   console.log("🚀 ~ file: familyApis.ts:15 ~ GetFamily ~ values", values);
   try {
-    const { data } = await axios.post(apiEndpoints.familyLogin, values);
+    const data = (await axios.post(apiEndpoints.familyLogin, values))?.data;
     console.log("🚀 ~ file: familyApis.ts:18 ~ GetFamily ~ data", data.id);
     if (data?.id) SetCookie("activeFamilyID", data.id);
     message.success(data?.message);
     return data;
   } catch (error: any) {
-    const { data } = error.response;
-
-    message.error(data?.message);
+    message.error(error.response?.data?.message);
+  }
+}
+export async function GetFamilyList() {
+  try {
+    const data = (await axios.get(apiEndpoints.getFamilyList))?.data;
+    message.success(data?.message);
+    return data;
+  } catch (error: any) {
+    message.error(error.response?.data?.message);
   }
 }
 

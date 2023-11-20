@@ -1,31 +1,35 @@
 import { useEffect, useState } from "react";
 
-import { GetFamilyDetails } from "../../APIs/familyApis";
-import { getLocalStorage } from "../../storage/storage";
+import { GetFamilyDetails, GetFamilyList } from "../../APIs/familyApis";
 
 const FamilyList = () => {
   const [families, setFamilies] = useState<any>([]);
   const getFamilies = async () => {
-    const familyList = getLocalStorage("familyList");
-    console.log(
-      "🚀 ~ file: index.tsx:10 ~ getFamilies ~ familyList:",
-      familyList
-    );
     const tmp: any = families;
-    await familyList.forEach(async (familyId: string) => {
-      const fTmp = await GetFamilyDetails(familyId);
-      console.log("🚀 ~ file: index.tsx:17 ~ familyList.forEach ~ fTmp:", fTmp);
-      tmp.push({ id: familyId, name: fTmp.name });
-      console.log("🚀 ~ file: index.tsx:19 ~ familyList.forEach ~ tmp:", tmp);
-      if (tmp?.length > 0) setFamilies(tmp);
+    await families?.forEach(async (family: any) => {
+      console.log(
+        "🚀 ~ file: index.tsx:10 ~ await families?.forEach ~ family:",
+        family
+      );
+      tmp.push({ id: family.id, name: family.name });
     });
+    if (tmp?.length > 0) setFamilies(tmp);
     console.log("🚀 ~ file: index.tsx:17 ~ getFamilies ~ tmp:", tmp);
   };
+  const getFamilyList = async () => {
+    const res = await GetFamilyList();
+    console.log("🚀 ~ file: index.tsx:26 ~ getFamilyList ~ res:", res);
+    if (res?.length > 0) setFamilies(res);
+  };
+  useEffect(() => {
+    getFamilyList();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     getFamilies();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useEffect(() => {}, [families]);
+  }, [families]);
 
   console.log("🚀 ~ file: index.tsx:34 ~ FamilyList ~ families:", families);
 
@@ -34,9 +38,8 @@ const FamilyList = () => {
       {/* <div className="font-semibold text-lg">Families</div>d */}
       {families && (
         <>
-          d
           {families.map((fam: any) => (
-            <div>Name : {fam.name}</div>
+            <div>Name : {fam?.name}</div>
           ))}
         </>
       )}

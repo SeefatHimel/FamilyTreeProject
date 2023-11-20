@@ -20,7 +20,7 @@ export async function getAuthLink() {
 
 export async function LogOut() {
   try {
-    const { data } = await axios.post(apiEndpoints.logout);
+    const data = (await axios.post(apiEndpoints.logout))?.data;
     console.log(data);
     RemoveAllCookies();
     message.success(data.message);

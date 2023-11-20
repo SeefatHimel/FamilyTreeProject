@@ -34,21 +34,6 @@ const FamilyListForm: React.FC = () => {
         data?.details
       );
       dispatch(setMembers(data?.details));
-      // const savedUserInfo = data && (await SaveUserInfo(data, dispatch));
-      // savedUserInfo
-      //   ? console.log("saved user info")
-      //   : console.log(" failed to save user info");
-
-      // message.success(data?.message);
-
-      // const params = {
-      //   color: "blue",
-      // };
-      // const options = {
-      //   pathname: "/FamilyTree/Family",
-      //   id: `?${GetCookie("activeFamilyID")}`,
-      // };
-      // navigate(options, { replace: true });
       console.log("<><><><><>");
 
       navigate("/FamilyTree/Family/" + data.id);
@@ -57,6 +42,10 @@ const FamilyListForm: React.FC = () => {
 
   const onFinish = async (values: any) => {
     console.log("Success:", values);
+    console.log(
+      "🚀 ~ file: familyListForm.tsx:60 ~ onFinish ~ values:",
+      values
+    );
     await signIn(values);
   };
 
